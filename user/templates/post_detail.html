@@ -1,21 +1,73 @@
-{% extends 'base.html' %}
-{% block content %}
-  <h2>{{ object.title }}</h2>
-  <p>{{ object.content }}</p>
-  <p>Location: {{ object.location }}</p>
-  {% if object.image %}
-    <img src="{{ object.image.url }}" alt="Image for {{ object.title }}">
-  {% endif %}
-  <p>Author: {{ object.author }}</p>
-  <p>Created at: {{ object.created_at }}</p>
-  <p>
-    <a href="{% url 'post-edit' object.pk %}">Edit</a>
-    <a href="{% url 'post-delete' object.pk %}">Delete</a>
-  </p>
-  <a href="{% url 'post-list' %}">Back to list</a>
-
-{% endblock %}
-
 {% load static %}
-<!-- 사용자 정의 CSS 파일 추가 -->
-<link rel="stylesheet" href="{% static 'user/css/detail.css' %}">
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naver Maps with travel.csv</title>
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=xhqofn9jhr"></script>
+    <style>
+        #map {
+            width: 50%;
+            height: 600px;
+        }
+        #logger {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        .infowindow {
+            cursor: pointer; /* 커서를 포인터로 변경하여 클릭 가능함을 나타냄 */
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="logger"></div>
+
+    <script>
+        var map = new naver.maps.Map('map', {
+            center: new naver.maps.LatLng(35.894, 129.220), // 초기 중심 좌표
+            zoom: 10.2 // 줌 레벨
+        });
+
+        // CSV 파일 읽기
+        fetch('{% static "travel.csv" %}')  // CSV 파일이 같은 폴더에 있을 경우
+            .then(response => response.text())
+            .then(data => {
+                const rows = data.split('\n').slice(1); // 첫 번째 행은 헤더이므로 생략
+                rows.forEach(row => {
+                    const [name, latitude, longitude, link] = row.split(','); // 링크 추가
+                    if (name && latitude && longitude && link) {
+                        const markerPosition = new naver.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
+
+                        const marker = new naver.maps.Marker({
+                            position: markerPosition,
+                            map: map,
+                            title: name // 마커에 툴팁으로 장소 이름 표시
+                        });
+
+                        // 인포윈도우 생성
+                        const infowindow = new naver.maps.InfoWindow({
+                            content: `<div class="infowindow" style="width:150px;text-align:center;">
+                                        <a href="${link}" target="_blank">${name}</a>
+                                       </div>` // 클릭 가능한 링크로 이름 추가
+                        });
+
+                        // 마커 클릭 이벤트
+                        naver.maps.Event.addListener(marker, 'click', function() {
+                            infowindow.open(map, marker); // 인포윈도우 열기
+                        });
+
+                        console.log(`Marker added: ${name} at ${markerPosition}`); // 마커 추가 로그
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error loading CSV:', error);
+                document.getElementById('logger').innerText = 'Error loading CSV: ' + error.message; // 에러 메시지 표시
+            });
+    </script>
+</body>
+</html>
+
+
