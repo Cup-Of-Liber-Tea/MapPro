@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Community for Traveler{% endblock %}</title>
+
+    {% load static %}
+
+    <!-- Django Admin CSS 파일을 가져오기 -->
+    <link rel="stylesheet" href="{% static 'admin/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'admin/css/responsive.css' %}">
+
+    <!-- 사용자 정의 앱의 CSS 추가 -->
+    <link rel="stylesheet" href="{% static 'user/css/base_style.css' %}">  <!-- 여기에 사용자 정의 CSS 경로 추가 -->
+</head>
+<body>
+    <header>
+        <h1> Community for Traveler </h1>
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- 개별 페이지에서 이 부분에 내용을 추가 -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 멀티캠퍼스 장고 미니 프로젝트 4조</p>
+    </footer>
+</body>
+</html>

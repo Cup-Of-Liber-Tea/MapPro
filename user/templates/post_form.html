@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>{% if object %}Edit Post{% else %}New Post{% endif %}</h2>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+  </form>
+  <br>
+  <a href="{% url 'post-list' %}">Back to list</a>
+  </br>
+{% endblock %}
+
+{% load static %}
+<!-- 사용자 정의 CSS 파일 추가 -->
+<link rel="stylesheet" href="{% static 'user/css/form.css' %}">

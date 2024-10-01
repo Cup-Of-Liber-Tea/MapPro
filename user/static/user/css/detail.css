@@ -1,0 +1,78 @@
+/* 기본적인 스타일은 앞서 작성한 것과 동일 */
+body {
+    font-family: Georgia, serif;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+/* 메인 콘텐츠 영역 */
+main {
+    padding: 20px;
+    margin: 20px auto;
+    width: 80%;
+    max-width: 1200px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* 제목 스타일 */
+h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+    color: #4CAF50;
+}
+
+/* 본문 내용 */
+p {
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+/* 이미지 스타일 */
+img {
+    max-width: 100%;
+    height: auto;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 링크 스타일 (수정 및 삭제 버튼) */
+a {
+    color: #4CAF50;
+    text-decoration: none;
+    margin-right: 15px;
+    font-weight: bold;
+    display: inline-block;
+    padding: 5px 10px;
+    border: 2px solid #4CAF50;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* 시간 및 작성자 정보 */
+p small {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    main {
+        width: 95%;
+    }
+
+    h2 {
+        font-size: 1.8em;
+    }
+
+    a {
+        margin-top: 10px;
+    }
+}
