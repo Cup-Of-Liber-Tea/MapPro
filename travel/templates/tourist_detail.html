@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>{{ tourist.name }}</h1>
+
+{% if tourist.image %}
+  <img src="{{ tourist.image.url }}" alt="{{ tourist.name }}" style="width: 200px; height: auto; margin: 10px;">
+{% endif %}
+
+<p><strong>설명:</strong> {{ tourist.description }}</p>
+<p><strong>위치:</strong> {{ tourist.location }}</p>
+<p><strong>운영 시간:</strong> {{ tourist.operating_hours }}</p>
+<p><strong>입장료:</strong> {{ tourist.entrance_fee }}</p>
+<p><strong>주차정보:</strong> {{ tourist.parking }}</p>
+
+<a href="{% url 'tourist_list' %}">목록으로 돌아가기</a>
+{% endblock %}

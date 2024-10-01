@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>여행지 목록</h1>
+
+<form action="{% url 'tourist_list' %}" method="get">
+    <input type="text" name="q" placeholder="여행지 검색" value="{{ query }}">
+    <button type="submit">검색</button>
+</form>
+
+<ul>
+    {% for tourist in tourist_list %}
+        <li>
+            <a href="{% url 'tourist_detail' pk=tourist.pk %}" style="color: black; text-decoration: none;">
+                {{ tourist.name }}
+            </a>
+        </li>
+    {% empty %}
+        <li>검색 결과가 없습니다.</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
