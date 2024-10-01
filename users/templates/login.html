@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>경주투어</title>
+    <link rel="stylesheet" href="{% static 'user/css/signin.css' %}">
+    <script src="{% static 'user/js/signin.js' %}" defer></script>
+</head>
+<body>
+    <div class="container right-panel-active">
+        <!-- Sign Up -->
+        <div class="container__form container--signup">
+            <form method="POST" action="{% url 'login_signup_view' %}" class="form" id="form1">
+                <h2 class="form__title">회원가입</h2>
+                {% csrf_token %}
+                {{ signup_form.as_p }}
+                <button type="submit" class="btn btn-signup">회원가입</button>
+
+            </form>
+        </div>
+
+        <!-- Sign In -->
+        <div class="container__form container--signin">
+            <form method="POST" action="{% url 'login_signup_view' %}" class="form" id="form2">
+                <h2 class="form__title">로그인</h2>
+                {% csrf_token %}
+                {{ login_form.as_p }}
+                <button type="submit"  name="로그인" class="btn">로그인</button>
+
+            </form>
+        </div>
+
+        <!-- Overlay -->
+        <div class="container__overlay">
+            <div class="overlay">
+                <div class="overlay__panel overlay--left">
+                    <button class="btn" id="signIn">로그인</button>
+                </div>
+                <div class="overlay__panel overlay--right">
+                    <button class="btn" id="signUp">회원가입</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
