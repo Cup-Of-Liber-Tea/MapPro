@@ -29,6 +29,12 @@
                 <button type="submit"  name="로그인" class="btn">로그인</button>
 
             </form>
+            {% if success_message %}
+            <div style="color: green;">
+                {{ success_message }}
+            </div>
+            {% endif %}
+
         </div>
 
         <!-- Overlay -->

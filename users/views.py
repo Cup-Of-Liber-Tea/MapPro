@@ -26,7 +26,8 @@ def login_signup_view(request):
             # 회원가입 처리 로직
             user = signup_form.save()
             login(request, user)
-            return redirect("/user/")
+            success_message = "회원가입이 완료되었습니다."
+            # return redirect("/user/")
 
 
     else:
