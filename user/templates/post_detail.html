@@ -1,21 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>{{ object.title }}</h2>
-<p>{{ object.content }}</p>
-<p>Location: {{ object.location }}</p>
-{% if object.image %}
-<img src="{{ object.image.url }}" alt="Image for {{ object.title }}">
-{% endif %}
-<p>Author: {{ object.author }}</p>
-<p>Created at: {{ object.created_at }}</p>
-<p>
-    <a href="{% url 'post-edit' object.pk %}">Edit</a>
-    <a href="{% url 'post-delete' object.pk %}">Delete</a>
-</p>
-<a href="{% url 'post-list' %}">Back to list</a>
-<!-- 지도태그 -->
-<div id="map"></div>
-<div id="logger"></div>
+  <h2>{{ object.title }}</h2>
+  <p>{{ object.content }}</p>
+  <p>Location: {{ object.location }}</p>
+  {% if object.image %}
+    <img src="{{ object.image.url }}" alt="Image for {{ object.title }}">
+  {% endif %}
+  <p>Author: {{ object.author }}</p>
+  <p>Created at: {{ object.created_at }}</p>
+
+    <a href="{% url 'post-edit' object.pk %}">Edit</a> /
+    <a href="{% url 'post-delete' object.pk %}">Delete</a> <br>
+
+  <a href="{% url 'post-list' %}">Back to list</a>
 {% endblock %}
 
 {% load static %}
