@@ -10,12 +10,6 @@
     {% for post in posts %}
       <li>
         <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
-
-        <!-- 게시글 작성자만 수정/삭제 버튼을 볼 수 있도록 조건문 추가 -->
-        {% if post.author == user %}
-          <a href="{% url 'post-edit' post.pk %}">Edit</a>
-          <a href="{% url 'post-delete' post.pk %}">Delete</a>
-        {% endif %}
       </li>
     {% endfor %}
   </ul>
