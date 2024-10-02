@@ -11,13 +11,6 @@
 <body>
     <!-- 메인 콘텐츠 영역 -->
     <main>
-        <nav>
-            <ul>
-                <li><a href="{% url 'home' %}">홈</a></li>
-                <li><a href="{% url 'destinations' %}">여행지</a></li>
-                <li><a href="{% url 'contact' %}">문의하기</a></li>
-            </ul>
-        </nav>
         {% block content %}
         <!-- 여기에 각 페이지의 콘텐츠가 삽입됩니다 -->
         {% endblock %}
