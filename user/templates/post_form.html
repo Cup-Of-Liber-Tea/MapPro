@@ -1,30 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
-<head>
-    <!-- 메타 태그 -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-    <title>IT is True</title>
-</head>
-
   <h2>{% if object %}Edit Post{% else %}New Post{% endif %}</h2>
   <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="button" class="btn btn-outline-primary">Save</button>
+    <button type="submit">Save</button>
   </form>
   <br>
   <a href="{% url 'post-list' %}">Back to list</a>
   </br>
 {% endblock %}
-<!-- Bootstrap JS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
-           integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous">
-    </script>
 
 {% load static %}
 <!-- 사용자 정의 CSS 파일 추가 -->
