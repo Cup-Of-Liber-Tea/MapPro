@@ -5,21 +5,18 @@
       <a href="{% url 'logout' %}">logout</a>
   </div>
 
-
   <ul>
     {% for post in posts %}
-      <li>
+      <li style="list-style-type: circle;">
+        <strong>{{ post.author }}</strong> :
         <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
       </li>
     {% endfor %}
   </ul>
   <a href="{% url 'post-create' %}">Create a new post</a>
 
-
 {% endblock %}
 
 {% load static %}
 <!-- 사용자 정의 CSS 파일 추가 -->
 <link rel="stylesheet" href="{% static 'user/css/list.css' %}">
-
-
