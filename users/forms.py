@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError  # ValidationError를 추가�
 class LoginForm(forms.Form):
     아이디 = forms.CharField(
         min_length=3,
-        required=False,
+        required=True,
         widget=forms.TextInput(
             attrs={
                 "placeholder": "사용자명",
@@ -19,7 +19,7 @@ class LoginForm(forms.Form):
     )
     비밀번호 = forms.CharField(
         min_length=4,
-        required=False,
+        required=True,
         widget=forms.PasswordInput(
             attrs={
                 "placeholder": "비밀번호",
@@ -33,16 +33,16 @@ class LoginForm(forms.Form):
 
 class SignupForm(forms.Form):
     username = forms.CharField(
-        required=False,
+        required=True,
     )
     password1 = forms.CharField(
         widget=forms.PasswordInput,
-        required=False,
+        required=True,
 
     )
     password2 = forms.CharField(
         widget=forms.PasswordInput,
-        required=False,
+        required=True,
     )
 
     def clean_username(self):
