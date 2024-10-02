@@ -27,7 +27,10 @@ def login_signup_view(request):
             user = signup_form.save()
             login(request, user)
             success_message = "회원가입이 완료되었습니다."
-            # return redirect("/user/")
+            return render(request, 'login.html', {
+                'signup_form': signup_form,
+                'success_message': success_message
+            })
 
 
     else:
