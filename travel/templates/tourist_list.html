@@ -8,16 +8,59 @@
     <button type="submit">검색</button>
 </form>
 
-<ul>
+<div class="tourist-grid">
     {% for tourist in tourist_list %}
-        <li>
+        <div class="tourist-item">
             <a href="{% url 'tourist_detail' pk=tourist.pk %}" style="color: black; text-decoration: none;">
-                {{ tourist.name }}
+                {% if tourist.image %}
+                    <img src="{{ tourist.image.url }}" alt="{{ tourist.name }}" class="thumbnail">
+                {% endif %}
+                <p>{{ tourist.name }}</p>
             </a>
-        </li>
+        </div>
     {% empty %}
-        <li>검색 결과가 없습니다.</li>
+        <p>검색 결과가 없습니다.</p>
     {% endfor %}
-</ul>
+</div>
+
+<div class="pagination">
+    {% if is_paginated %}
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1{% if query %}&q={{ query }}{% endif %}">&laquo; 처음</a>
+                <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">이전</a>
+            {% endif %}
+            <span class="current">
+                페이지 {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+            </span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">다음</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}">마지막 &raquo;</a>
+            {% endif %}
+        </span>
+    {% endif %}
+</div>
+
+<style>
+.tourist-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+.tourist-item {
+    text-align: center;
+}
+.thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px; /* 이미지 모서리를 둥글게 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+}
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+</style>
 
 {% endblock %}
