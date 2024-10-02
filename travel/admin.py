@@ -7,7 +7,7 @@ from .models import Tourist
 class TouristAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'location')
     search_fields = ('name', 'location')
-    list_filter = ('location',)
+    list_filter = ('name',)
 
     def image_preview(self, obj):
         if obj.image:
