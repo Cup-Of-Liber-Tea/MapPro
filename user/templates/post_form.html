@@ -1,16 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
-  <h2>{% if object %}Edit Post{% else %}New Post{% endif %}</h2>
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-  </form>
-  <br>
-  <a href="{% url 'post-list' %}">Back to list</a>
-  </br>
-{% endblock %}
+  <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+    <h2>{% if object %}Edit Post{% else %}New Post{% endif %}</h2>
+    <form method="POST" enctype="multipart/form-data" style="width: 100%; max-width: 400px;">
+      {% csrf_token %}
 
-{% load static %}
-<!-- 사용자 정의 CSS 파일 추가 -->
-<link rel="stylesheet" href="{% static 'user/css/form.css' %}">
+      <!-- Title Field -->
+      <div style="display: flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
+        <label style="width: 100px;">Title</label>
+        {{ form.title }}
+      </div>
+
+      <!-- Content Field -->
+      <div style="display: flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
+        <label style="width: 100px;">Content</label>
+        {{ form.content }}
+      </div>
+
+      <!-- Location Field -->
+      <div style="display: flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
+        <label style="width: 100px;">Location</label>
+        {{ form.location }}
+      </div>
+
+      <!-- Image Field -->
+      <div style="display: flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
+        <label style="width: 100px;">Image</label>
+        {{ form.image }}
+      </div>
+
+      <button type="submit" style="margin-top: 10px;">Save</button>
+    </form>
+
+    <br>
+    <a href="{% url 'post-list' %}" style="margin-top: 20px; display: inline-block;">Back to list</a>
+    </br>
+  </div>
+{% endblock %}
