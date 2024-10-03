@@ -80,6 +80,11 @@
         {% endfor %}
     </div>
 
+    <form class="search-form" action="" method="get">
+        <input type="text" name="q" placeholder="여행지 검색" value="{{ query|default_if_none:'' }}">
+        <button type="submit">검색</button>
+    </form>
+
     <div class="pagination">
         {% if is_paginated %}
             {% if page_obj.has_previous %}
@@ -87,10 +92,6 @@
                 <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">이전</a>
             {% endif %}
 
-    <form class="search-form" action="" method="get">
-        <input type="text" name="q" placeholder="여행지 검색" value="{{ query|default_if_none:'' }}">
-        <button type="submit">검색</button>
-    </form>
             <span class="current">
                 페이지 {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
             </span>
