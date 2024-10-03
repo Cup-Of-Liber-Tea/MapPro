@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+</style><!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -28,16 +28,35 @@
         .infowindow {
             cursor: pointer;
         }
+
+        .content {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .content img {
+            width: 25%; /* 화면의 1/4 크기 */
+            margin-right: 20px;
+            object-fit: cover; /* 이미지 비율 유지 */
+        }
+
+        .content .text {
+            max-width: 60%;
+        }
     </style>
 </head>
 <body>
     <h1>{{ tourist.name }}</h1>
 
-    {% if tourist.image %}
-        <img src="{{ tourist.image.url }}" alt="{{ tourist.name }}" style="width: 200px; height: auto; margin: 10px;">
-    {% endif %}
+    <div class="content">
+        {% if tourist.image %}
+        <img src="{{ tourist.image.url }}" alt="{{ tourist.name }}">
+        {% endif %}
+        <div class="text">
+            <p>{{ tourist.description }}</p>
+        </div>
+    </div>
 
-    <p><strong>설명:</strong> {{ tourist.description }}</p>
     <p><strong>위치:</strong> {{ tourist.location }}</p>
     <p><strong>운영 시간:</strong> {{ tourist.operating_hours|default:"전화문의" }}</p>
     <p><strong>입장료:</strong> {{ tourist.entrance_fee|default:"홈페이지문의" }}</p>
@@ -102,6 +121,7 @@
                 console.error('Error loading CSV:', error);
                 document.getElementById('logger').innerText = 'Error loading CSV: ' + error.message;
             });
+            
     </script>
 </body>
 </html>
