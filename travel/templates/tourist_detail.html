@@ -1,17 +1,107 @@
-{% extends 'base.html' %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ tourist.name }} - Naver Maps</title>
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=xhqofn9jhr"></script>
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/markerclusterer.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
-<h1>{{ tourist.name }}</h1>
+        #map {
+            width: 45%; /* 너비 조정 */
+            height: 350px;
+            margin: 20px 0; /* 상하 여백 추가 */
+        }
 
-{% if tourist.image %}
-  <img src="{{ tourist.image.url }}" alt="{{ tourist.name }}" style="width: 200px; height: auto; margin: 10px;">
-{% endif %}
+        #logger {
+            margin-top: 10px;
+            font-size: 16px;
+        }
 
-<p><strong>설명:</strong> {{ tourist.description }}</p>
-<p><strong>위치:</strong> {{ tourist.location }}</p>
-<p><strong>운영 시간:</strong> {{ tourist.operating_hours|default:"전화문의" }}</p>
-<p><strong>입장료:</strong> {{ tourist.entrance_fee|default:"홈페이지문의" }}</p>
-<p><strong>주차정보:</strong> {{ tourist.parking|default:"전화문의" }}</p>
+        .infowindow {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ tourist.name }}</h1>
 
-<a href="{% url 'tourist_list' %}">목록으로 돌아가기</a>
-{% endblock %}
+    {% if tourist.image %}
+        <img src="{{ tourist.image.url }}" alt="{{ tourist.name }}" style="width: 200px; height: auto; margin: 10px;">
+    {% endif %}
+
+    <p><strong>설명:</strong> {{ tourist.description }}</p>
+    <p><strong>위치:</strong> {{ tourist.location }}</p>
+    <p><strong>운영 시간:</strong> {{ tourist.operating_hours|default:"전화문의" }}</p>
+    <p><strong>입장료:</strong> {{ tourist.entrance_fee|default:"홈페이지문의" }}</p>
+    <p><strong>주차정보:</strong> {{ tourist.parking|default:"전화문의" }}</p>
+
+    <a href="{% url 'tourist_list' %}">목록으로 돌아가기</a>
+
+    <div id="map"></div>
+    <div id="logger"></div>
+
+    <script>
+        // Naver Map 생성
+        var map = new naver.maps.Map('map', {
+            center: new naver.maps.LatLng(35.894, 129.220), // 기본 위치
+            zoom: 14
+        });
+
+        var markers = []; // 마커 배열 생성
+
+        // CSV 파일 읽기
+        fetch('travel.csv')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                const rows = data.split('\n').slice(1);
+                rows.forEach(row => {
+                    const [name, latitude, longitude, link] = row.split(',');
+                    if (name && latitude && longitude && link) {
+                        const markerPosition = new naver.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
+
+                        const marker = new naver.maps.Marker({
+                            position: markerPosition,
+                            map: map,
+                            title: name
+                        });
+
+                        // 인포윈도우 생성
+                        const infowindow = new naver.maps.InfoWindow({
+                            content: `<div class="infowindow" style="width:150px;text-align:center;">
+                                        <a href="${link}" target="_blank">${name}</a>
+                                       </div>`
+                        });
+
+                        // 마커 클릭 이벤트
+                        naver.maps.Event.addListener(marker, 'click', function() {
+                            infowindow.open(map, marker);
+                        });
+
+                        // 마커를 배열에 추가
+                        markers.push(marker);
+                        console.log(`Marker added: ${name} at ${markerPosition}`);
+                    } else {
+                        console.warn('Invalid row data:', row);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error loading CSV:', error);
+                document.getElementById('logger').innerText = 'Error loading CSV: ' + error.message;
+            });
+    </script>
+</body>
+</html>
