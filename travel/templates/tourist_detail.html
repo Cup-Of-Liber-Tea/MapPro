@@ -1,4 +1,4 @@
-</style><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -15,9 +15,9 @@
         }
 
         #map {
-            width: 45%; /* 너비 조정 */
+            width: 45%;
             height: 350px;
-            margin: 20px 0; /* 상하 여백 추가 */
+            margin: 20px 0;
         }
 
         #logger {
@@ -28,100 +28,100 @@
         .infowindow {
             cursor: pointer;
         }
-
-        .content {
-            display: flex;
-            align-items: flex-start;
-        }
-
-        .content img {
-            width: 25%; /* 화면의 1/4 크기 */
-            margin-right: 20px;
-            object-fit: cover; /* 이미지 비율 유지 */
-        }
-
-        .content .text {
-            max-width: 60%;
-        }
     </style>
 </head>
 <body>
     <h1>{{ tourist.name }}</h1>
 
-    <div class="content">
-        {% if tourist.image %}
-        <img src="{{ tourist.image.url }}" alt="{{ tourist.name }}">
-        {% endif %}
-        <div class="text">
-            <p>{{ tourist.description }}</p>
-        </div>
-    </div>
+    {% if tourist.image %}
+        <img src="{{ tourist.image.url }}" alt="{{ tourist.name }}" style="width: 200px; height: auto; margin: 10px;">
+    {% endif %}
 
+    <p><strong>설명:</strong> {{ tourist.description }}</p>
     <p><strong>위치:</strong> {{ tourist.location }}</p>
     <p><strong>운영 시간:</strong> {{ tourist.operating_hours|default:"전화문의" }}</p>
     <p><strong>입장료:</strong> {{ tourist.entrance_fee|default:"홈페이지문의" }}</p>
     <p><strong>주차정보:</strong> {{ tourist.parking|default:"전화문의" }}</p>
 
-    <a href="{% url 'tourist_list' %}">목록으로 돌아가기</a>
-
     <div id="map"></div>
     <div id="logger"></div>
 
     <script>
-        // Naver Map 생성
-        var map = new naver.maps.Map('map', {
-            center: new naver.maps.LatLng(35.894, 129.220), // 기본 위치
-            zoom: 14
-        });
+        // 경주 위치
+        const kyungjuLocation = {
+            latitude: 35.8393, // 경주 위도
+            longitude: 129.2279 // 경주 경도
+        };
 
-        var markers = []; // 마커 배열 생성
+        // API URL
+        const apiUrl = "http://apis.data.go.kr/5050000/dstrctsTrrsrtService/getDstrctsTrrsrt";
+        const params = {
+            serviceKey: "0OqIh/dSuVpGLLplebEorV4PTg6OC2ht/iiVg0ZabhBfKsX2EJwtAoizU3JjdH/uNz6G/800CT8f6YWfbI8v6w==",
+            pageNo: "1",
+            numOfRows: "164"
+        };
 
-        // CSV 파일 읽기
-        fetch('travel.csv')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
-            })
-            .then(data => {
-                const rows = data.split('\n').slice(1);
-                rows.forEach(row => {
-                    const [name, latitude, longitude, link] = row.split(',');
-                    if (name && latitude && longitude && link) {
-                        const markerPosition = new naver.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
+        // API 호출 함수
+        async function fetchTouristSpots() {
+            const response = await fetch(`${apiUrl}?${new URLSearchParams(params)}`);
+            if (!response.ok) {
+                throw new Error("API 호출 실패: " + response.status);
+            }
+            const data = await response.json();
+            return data;
+        }
 
-                        const marker = new naver.maps.Marker({
-                            position: markerPosition,
-                            map: map,
-                            title: name
-                        });
+        // 마커 추가 및 지도 초기화 함수
+        function initMap(items) {
+            // tourist.name과 일치하는 타이틀 찾기
+            const touristName = "{{ tourist.name }}";
+            const matchingItem = items.find(item => item.CON_TITLE === touristName);
 
-                        // 인포윈도우 생성
-                        const infowindow = new naver.maps.InfoWindow({
-                            content: `<div class="infowindow" style="width:150px;text-align:center;">
-                                        <a href="${link}" target="_blank">${name}</a>
-                                       </div>`
-                        });
+            if (matchingItem && matchingItem.CON_LATITUDE && matchingItem.CON_LONGITUDE) {
+                // 마커를 기준으로 지도를 설정합니다.
+                const markerPosition = new naver.maps.LatLng(matchingItem.CON_LATITUDE, matchingItem.CON_LONGITUDE);
 
-                        // 마커 클릭 이벤트
-                        naver.maps.Event.addListener(marker, 'click', function() {
-                            infowindow.open(map, marker);
-                        });
+                var mapOptions = {
+                    center: markerPosition, // 마커 위치로 중심 설정
+                    zoom: 15 // 15로 설정하면 약 300m 범위를 표시
+                };
 
-                        // 마커를 배열에 추가
-                        markers.push(marker);
-                        console.log(`Marker added: ${name} at ${markerPosition}`);
-                    } else {
-                        console.warn('Invalid row data:', row);
-                    }
+                var map = new naver.maps.Map('map', mapOptions);
+
+                // 마커 추가
+                var marker = new naver.maps.Marker({
+                    position: markerPosition,
+                    map: map,
+                    title: matchingItem.CON_TITLE
                 });
+
+                var infoWindow = new naver.maps.InfoWindow({
+                    content: `<h4>${matchingItem.CON_TITLE}</h4>`
+                });
+
+                // 마커 클릭 시 정보 창 표시
+                naver.maps.Event.addListener(marker, 'click', function() {
+                    infoWindow.open(map, marker);
+                });
+            } else {
+                console.error("관광지를 찾을 수 없습니다.");
+                document.getElementById('logger').innerText = '관광지를 찾을 수 없습니다.';
+            }
+        }
+
+        // API에서 관광지 정보 가져오기
+        fetchTouristSpots()
+            .then(data => {
+                if (data.response && data.response.body && data.response.body.items) {
+                    const items = data.response.body.items.item; // 올바른 데이터 접근
+                    initMap(items);
+                } else {
+                    console.error("데이터 구조가 예상과 다릅니다.");
+                }
             })
-            .catch(error => {
-                console.error('Error loading CSV:', error);
-                document.getElementById('logger').innerText = 'Error loading CSV: ' + error.message;
-            });
-            
+            .catch(error => console.error('데이터 로드 중 오류 발생:', error));
     </script>
+
+    <a href="{% url 'tourist_list' %}">목록으로 돌아가기</a>
 </body>
 </html>
