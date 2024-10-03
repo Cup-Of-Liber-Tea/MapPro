@@ -7,7 +7,7 @@ class TouristListView(ListView):
     model = Tourist
     template_name = 'tourist_list.html'
     context_object_name = "tourist_list"
-    paginate_by = 9
+    paginate_by = 6
 
     def get_queryset(self): # 검색할 경우 필터링된 쿼리셋 반환
         queryset = super().get_queryset()

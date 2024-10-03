@@ -9,9 +9,9 @@
 
 <p><strong>설명:</strong> {{ tourist.description }}</p>
 <p><strong>위치:</strong> {{ tourist.location }}</p>
-<p><strong>운영 시간:</strong> {{ tourist.operating_hours }}</p>
-<p><strong>입장료:</strong> {{ tourist.entrance_fee }}</p>
-<p><strong>주차정보:</strong> {{ tourist.parking }}</p>
+<p><strong>운영 시간:</strong> {{ tourist.operating_hours|default:"설명이 없습니다." }}</p>
+<p><strong>입장료:</strong> {{ tourist.entrance_fee|default:"설명이 없습니다." }}</p>
+<p><strong>주차정보:</strong> {{ tourist.parking|default:"설명이 없습니다." }}</p>
 
 <a href="{% url 'tourist_list' %}">목록으로 돌아가기</a>
 {% endblock %}
