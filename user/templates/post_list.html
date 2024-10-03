@@ -5,6 +5,12 @@
       <a href="{% url 'logout' %}">logout</a>
   </div>
 
+  <!-- 검색 폼 추가 -->
+  <form method="GET" action="{% url 'post-list' %}">
+      <input type="text" name="q" placeholder="글 찾기" value="{{ request.GET.q }}">
+      <button type="submit">검색</button>
+  </form>
+
   <ul>
     {% for post in posts %}
       <li style="list-style-type: circle;">

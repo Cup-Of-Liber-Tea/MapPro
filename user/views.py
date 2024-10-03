@@ -2,11 +2,19 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
+from django.db.models import Q
 
 class PostListView(ListView):
     model = Post
     template_name = 'post_list.html'
     context_object_name = 'posts'
+
+    # 검색 기능 추가
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
+        return Post.objects.all()
 
 class PostDetailView(DetailView):
     model = Post
@@ -22,14 +30,12 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-# PermissionRequiredMixin 제거
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     template_name = 'post_form.html'
     fields = ['title', 'content', 'location', 'image']
 
     def get_queryset(self):
-        # 현재 로그인한 사용자가 작성자인 경우에만 쿼리셋 반환
         return super().get_queryset().filter(author=self.request.user)
 
 class PostDeleteView(LoginRequiredMixin, DeleteView):
@@ -38,5 +44,4 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('post-list')
 
     def get_queryset(self):
-        # 현재 로그인한 사용자가 작성자인 경우에만 쿼리셋 반환
         return super().get_queryset().filter(author=self.request.user)
