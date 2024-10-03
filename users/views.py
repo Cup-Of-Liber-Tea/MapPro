@@ -18,7 +18,7 @@ def login_signup_view(request):
 
             if user:
                 login(request, user)
-                return redirect("/user/")
+                return redirect("/travel/")
             # else:
             #     login_form.add_error(None, "로그인 실패. 다시 입력해주세요")
 
