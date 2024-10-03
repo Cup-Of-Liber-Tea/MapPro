@@ -1,19 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
   <div style="display: flex; justify-content: space-between; align-items: center;">
-      <h2>Post List</h2>
+      <form method="GET" action="{% url 'post-list' %}">
+          <input type="text" name="q" placeholder="글 찾기" value="{{ request.GET.q }}">
+          <button type="submit">검색</button>
+      </form>
       <a href="{% url 'logout' %}">logout</a>
   </div>
 
-  <ul>
-    {% for post in posts %}
-      <li style="list-style-type: circle;">
-        <strong>{{ post.author }}</strong> :
-        <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
-      </li>
-    {% endfor %}
-  </ul>
-  <a href="{% url 'post-create' %}">Create a new post</a>
+  <div style="text-align: center; margin-top: 20px;">
+      <h2>Post List</h2>
+      <ul style="display: inline-block; text-align: left;">
+        {% for post in posts %}
+          <li style="list-style-type: circle;">
+            <strong>{{ post.author }}</strong> :
+            <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+      <br>
+      <a href="{% url 'post-create' %}">Create a new post</a>
+  </div>
 
 {% endblock %}
 
