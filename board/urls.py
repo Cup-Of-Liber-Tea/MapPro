@@ -8,6 +8,7 @@ urlpatterns = [
     path("user/", include('user.urls')),
     path("", include('users.urls')),     ############ 추가 함(남승수)
     path("travel/", include('travel.urls')),
+    path("data/", include('data.urls')),
 ]
 
 if settings.DEBUG:
