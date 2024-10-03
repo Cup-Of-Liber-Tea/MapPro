@@ -9,7 +9,6 @@ class PostListView(ListView):
     template_name = 'post_list.html'
     context_object_name = 'posts'
 
-    # 검색 기능 추가
     def get_queryset(self):
         query = self.request.GET.get('q')
         if query:
@@ -37,6 +36,10 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_queryset(self):
         return super().get_queryset().filter(author=self.request.user)
+
+    # 성공적으로 업데이트된 후 리다이렉트할 URL 설정
+    def get_success_url(self):
+        return reverse_lazy('post-detail', kwargs={'pk': self.object.pk})
 
 class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
