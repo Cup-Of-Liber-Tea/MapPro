@@ -10,7 +10,7 @@ class PostListView(ListView):
     context_object_name = 'posts'
 
     def get_queryset(self):
-        query = self.request.GET.get('q')
+        query = self.request.GET.get('search')  # 'search'로 변경
         if query:
             return Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
         return Post.objects.all()
