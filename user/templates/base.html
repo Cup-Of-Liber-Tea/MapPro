@@ -16,24 +16,31 @@
             margin-top: 10px;
             font-size: 16px;
         }
+
         nav {
             background-color: #333;
             overflow: hidden;
-            height: 50px; /* 네브바 높이 조정 */
+            height: 50px;
+            /* 네브바 높이 조정 */
         }
+
         nav ul {
             list-style-type: none;
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center; /* 가운데 정렬 */
+            justify-content: center;
+            /* 가운데 정렬 */
         }
+
         footer {
-            background-color: #333; /* 푸터 색상 */
+            background-color: #333;
+            /* 푸터 색상 */
             color: white;
             text-align: center;
             padding: 10px 0;
         }
+
         .infowindow {
             cursor: pointer;
             /* 커서를 포인터로 변경하여 클릭 가능함을 나타냄 */
@@ -71,11 +78,11 @@
     {% load static %}
 
     <!-- Django Admin CSS 파일을 가져오기 -->
-    <link rel="stylesheet" href="{% static 'admin/css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'admin/css/responsive.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'admin/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'admin/css/responsive.css' %}"> -->
 
     <!-- 사용자 정의 앱의 CSS 추가 -->
-    <link rel="stylesheet" href="{% static 'user/css/base_style.css' %}"> <!-- 여기에 사용자 정의 CSS 경로 추가 -->
+    <link rel="stylesheet" href="{% static 'user/css/kimchi.css' %}"> <!-- 김치css추가 ㅎㅎ -->
 </head>
 
 <body>
@@ -83,12 +90,17 @@
         <h1> Community for Traveler </h1>
     </header>
     <nav>
-        <ul>
-            <li><a href="/">리뷰</a></li>
-            <li><a href="{% url 'tourist_list' %}">travel</a></li>
-            <li><a href="{% url 'admin:index' %}">어드민</a></li>
-            <li><a href="/data">데이터</a></li>
-        </ul>
+        <div class="menu-container">
+            <ul>
+                <li><a href="/">리뷰</a></li>
+                <li><a href="{% url 'tourist_list' %}">travel</a></li>
+                <li><a href="/data">데이터</a></li>
+                <li><a href="{% url 'admin:index' %}">어드민</a></li>
+            </ul>
+        </div>
+        <div class="logout-button">
+            <a href="{% url 'logout' %}">로그아웃</a>
+        </div>
     </nav>
 
     <main>
