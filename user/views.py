@@ -19,6 +19,11 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'post_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['reviews'] = Post.objects.filter(location=self.object.location)  # 해당 위치의 리뷰
+        return context
+
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = 'post_form.html'
