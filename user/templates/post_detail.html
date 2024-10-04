@@ -1,28 +1,31 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-  <div style="text-align: center;">
-    <h2>{{ object.title }}</h2>
-    
-    <div style="border: 1px solid #ccc; padding: 15px; border-radius: 10px; width: 80%; margin: 0 auto;">
+  <link rel="stylesheet" href="{% static 'user/css/detail.css' %}">
+
+  <div class="post-detail-container">
+    <h2 class="post-title">{{ object.title }}</h2>
+
+    <div class="post-content">
       <p>{{ object.content }}</p>
     </div>
 
-    <p>Location: {{ object.location }}</p>
+    <p class="post-location">Location: {{ object.location }}</p>
 
     {% if object.image %}
-      <img src="{{ object.image.url }}" alt="Image for {{ object.title }}" style="width: 270px; height: 270px; object-fit: cover;">
+      <img class="post-image" src="{{ object.image.url }}" alt="Image for {{ object.title }}">
     {% endif %}
 
-    <p>Author: {{ object.author }}</p>
-    <p>Created at: {{ object.created_at }}</p>
+    <p class="post-author">Author: {{ object.author }}</p>
+    <p class="post-created-at">Created at: {{ object.created_at }}</p>
 
-    <a href="{% url 'post-edit' object.pk %}">Edit</a> |
-    <a href="{% url 'post-delete' object.pk %}">Delete</a> <br>
+    {% if request.user == object.author %}
+      <div class="post-actions">
+        <a class="edit-link" href="{% url 'post-edit' object.pk %}">Edit</a> |
+        <a class="delete-link" href="{% url 'post-delete' object.pk %}">Delete</a>
+      </div>
+    {% endif %}
 
-    <a href="{% url 'post-list' %}">Back to list</a>
+    <a class="back-link" href="{% url 'post-list' %}">Back to list</a>
   </div>
 {% endblock %}
-
-{% load static %}
-<!-- 사용자 정의 CSS 파일 추가 -->
-<link rel="stylesheet" href="{% static 'user/css/detail.css' %}">

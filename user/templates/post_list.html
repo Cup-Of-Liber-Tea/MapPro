@@ -1,29 +1,129 @@
 {% extends 'base.html' %}
-{% block content %}
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-      <form method="GET" action="{% url 'post-list' %}">
-          <input type="text" name="q" placeholder="글 찾기" value="{{ request.GET.q }}">
-          <button type="submit">검색</button>
-      </form>
-      <a href="{% url 'logout' %}">logout</a>
-  </div>
-
-  <div style="text-align: center; margin-top: 20px;">
-      <h2>Post List</h2>
-      <ul style="display: inline-block; text-align: left;">
-        {% for post in posts %}
-          <li style="list-style-type: circle;">
-            <strong>{{ post.author }}</strong> :
-            <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-      <br>
-      <a href="{% url 'post-create' %}">Create a new post</a>
-  </div>
-
-{% endblock %}
-
 {% load static %}
-<!-- 사용자 정의 CSS 파일 추가 -->
-<link rel="stylesheet" href="{% static 'user/css/list.css' %}">
+
+{% block content %}
+<style>
+    body {
+        font-size: 16px;
+    }
+    .post-list {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        font-family: Arial, sans-serif;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .post-list-header {
+        background-color: #f8f9fa;
+        padding: 15px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+    }
+    .search-form {
+        margin-right: 15px;
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+    }
+    .search-input {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px 0 0 4px;
+        width: 100%;
+        max-width: 400px;
+        font-size: 16px;
+    }
+    .search-button {
+        padding: 8px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .search-button:hover {
+        background-color: #0056b3;
+    }
+    .post-list-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 20px 0;
+        text-align: center;
+    }
+    .logout-link {
+        text-decoration: none;
+        color: #007bff;
+        margin-left: 15px;
+        font-size: 16px;
+    }
+    .post-item {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        flex-direction: column; /* 세로 방향으로 배치 */
+    }
+    .post-item:last-child {
+        border-bottom: none;
+    }
+    .post-title-container {
+        margin-bottom: 10px; /* 제목과 본문 사이 간격 */
+    }
+    .post-title {
+        text-decoration: none;
+        color: #007bff;
+        font-size: 18px;
+        font-weight: bold; /* 제목 강조 */
+    }
+    .post-content {
+        margin-bottom: 10px; /* 본문과 작성자 사이 간격 */
+        font-size: 16px; /* 본문 글자 크기 */
+    }
+    .post-author {
+        font-weight: bold;
+        color: #333;
+        font-size: 16px;
+        text-align: right; /* 오른쪽 정렬 */
+    }
+    .create-post-link {
+        display: block;
+        text-align: center;
+        padding: 15px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 18px;
+    }
+</style>
+
+<div class="post-list">
+    <div class="post-list-header">
+        <form class="search-form" action="{% url 'post-list' %}" method="get">
+            <input type="text" name="search" class="search-input" placeholder="글찾기">
+            <button type="submit" class="search-button">검색</button>
+        </form>
+        <a href="{% url 'logout' %}" class="logout-link">logout</a>
+    </div>
+
+    <h2 class="post-list-title">Post List</h2>
+
+    {% for post in posts %}
+    <div class="post-item">
+        <div class="post-title-container">
+            <a href="{% url 'post-detail' post.pk %}" class="post-title">{{ post.title }}</a>
+        </div>
+        <div class="post-content">
+            {{ post.content|truncatewords:30 }} <!-- 본문 내용 -->
+        </div>
+        <span class="post-author">작성자: {{ post.author }}</span>
+    </div>
+    {% endfor %}
+
+    <a href="{% url 'post-create' %}" class="create-post-link">Create a new post</a>
+</div>
+{% endblock %}
