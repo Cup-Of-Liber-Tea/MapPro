@@ -29,6 +29,18 @@
         {{ form.image }}
       </div>
 
+      <!-- Birthdate Field (using <input type="date">) -->
+      <div style="display: flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
+        <label style="width: 100px;">Birthdate</label>
+        <input type="date" name="birthdate" id="birthdate" value="{{ form.birthdate.value|default_if_none:'' }}" required>
+      </div>
+
+      <!-- Gender Field -->
+      <div style="display: flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
+        <label style="width: 100px;">Gender</label>
+        {{ form.gender }}
+      </div>
+
       <button type="submit" style="margin-top: 10px;">Save</button>
     </form>
 

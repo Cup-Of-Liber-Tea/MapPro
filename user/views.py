@@ -22,20 +22,38 @@ class PostDetailView(DetailView):
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = 'post_form.html'
-    fields = ['title', 'content', 'location', 'image']
-    success_url = '/user/'
+    fields = ['title', 'content', 'location', 'image', 'gender']  # birthdate 필드는 제거
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        # 생년월일 결합
+        birth_year = self.request.POST.get('birth_year')
+        birth_month = self.request.POST.get('birth_month')
+        birth_day = self.request.POST.get('birth_day')
+
+        if birth_year and birth_month and birth_day:
+            form.instance.birthdate = f"{birth_year}-{birth_month}-{birth_day}"
+
         return super().form_valid(form)
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     template_name = 'post_form.html'
-    fields = ['title', 'content', 'location', 'image']
+    fields = ['title', 'content', 'location', 'image', 'gender']  # birthdate 필드는 제거
 
     def get_queryset(self):
         return super().get_queryset().filter(author=self.request.user)
+
+    def form_valid(self, form):
+        # 생년월일 결합
+        birth_year = self.request.POST.get('birth_year')
+        birth_month = self.request.POST.get('birth_month')
+        birth_day = self.request.POST.get('birth_day')
+
+        if birth_year and birth_month and birth_day:
+            form.instance.birthdate = f"{birth_year}-{birth_month}-{birth_day}"
+
+        return super().form_valid(form)
 
     # 성공적으로 업데이트된 후 리다이렉트할 URL 설정
     def get_success_url(self):
