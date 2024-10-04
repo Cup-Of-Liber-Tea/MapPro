@@ -121,7 +121,18 @@
             })
             .catch(error => console.error('데이터 로드 중 오류 발생:', error));
     </script>
-
+    <h2>리뷰 목록</h2>
+    {% if reviews %}
+        <ul>
+            {% for review in reviews %}
+                <li>
+                    <a href="{% url 'post_detail' review.id %}">{{ review.author }}: {{ review.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>작성된 리뷰가 없습니다.</p>
+    {% endif %}
     <a href="{% url 'tourist_list' %}">목록으로 돌아가기</a>
 </body>
 </html>

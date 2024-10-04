@@ -13,8 +13,8 @@
 
       <!-- Content Field -->
       <div style="display: flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
-        <label style="width: 100px;">Content</label>
-        {{ form.content }}
+      <label style="width: 100px;">Content</label>
+      <textarea name="content" style="width: 1000px; height: 300px; padding: 5px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;">{{ form.content.value }}</textarea>
       </div>
 
       <!-- Location Field -->
@@ -24,9 +24,9 @@
       </div>
 
       <!-- Image Field -->
-      <div style="display: flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
-        <label style="width: 100px;">Image</label>
-        {{ form.image }}
+      <div style="margin-bottom: 10px;">
+      <label style="display: block; width: 100px;">Image</label>
+      {{ form.image }}
       </div>
 
       <!-- Birthdate Field (using <input type="date">) -->

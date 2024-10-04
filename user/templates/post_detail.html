@@ -16,8 +16,10 @@
     <p>Author: {{ object.author }}</p>
     <p>Created at: {{ object.created_at }}</p>
 
-    <a href="{% url 'post-edit' object.pk %}">Edit</a> |
-    <a href="{% url 'post-delete' object.pk %}">Delete</a> <br>
+    {% if request.user.username == object.author %}
+        <a href="{% url 'post-edit' object.pk %}">Edit</a> |
+        <a href="{% url 'post-delete' object.pk %}">Delete</a> <br>
+    {% endif %}
 
     <a href="{% url 'post-list' %}">Back to list</a>
   </div>
