@@ -1,160 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>여행 데이터 분석</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f8f9fa;
+            font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
             color: #333;
+            background: #f5f5f5;
         }
-        .container {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            padding: 30px;
-            margin-top: 30px;
-            margin-bottom: 30px;
+        #container {
+            width: 90%;
+            margin: 0 auto;
+            padding: 20px 0;
         }
-        h2 {
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
+        h1 {
+            font-weight: 300;
+            font-size: 24px;
+            color: #666;
+            padding: 0 10px;
             margin-bottom: 20px;
         }
-        .table {
-            border-collapse: separate;
-            border-spacing: 0;
+        .module {
+            background: #fff;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
         }
-        .table th {
-            background-color: #3498db;
-            color: #ffffff;
-            font-weight: bold;
+        .module h2 {
+            background: #79aec8;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 400;
+            margin: 0;
+            padding: 10px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
-        .table td, .table th {
-            border: none;
-            padding: 12px;
+        table {
+            border-collapse: collapse;
+            width: 100%;
         }
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(52, 152, 219, 0.05);
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
         }
-        .table-hover tbody tr:hover {
-            background-color: rgba(52, 152, 219, 0.1);
+        th {
+            background-color: #f2f2f2;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
         }
         canvas {
             max-width: 100%;
-            margin-top: 30px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 8px;
+            height: auto;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
+    <div id="container">
+        <h1>여행 데이터 분석 대시보드</h1>
+        
+        <div class="module">
+            <h2>인기 여행지 통계</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>여행지</th>
+                        <th>리뷰 수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in destination_stats %}
+                    <tr>
+                        <td>{{ stat.title }}</td>
+                        <td>{{ stat.count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-<div class="container">
-    <h2>인기 여행지 통계</h2>
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>여행지</th>
-                <th>리뷰 수</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for stat in destination_stats %}
-            <tr>
-                <td>{{ stat.title }}</td>
-                <td>{{ stat.count }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+        <div class="module">
+            <h2>작성자별 리뷰 통계</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>작성자</th>
+                        <th>리뷰 수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in author_stats %}
+                    <tr>
+                        <td>{{ stat.author }}</td>
+                        <td>{{ stat.count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-<div class="container">
-     <h2>작성자별 리뷰 통계</h2>
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>작성자</th>
-                <th>리뷰 수</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for stat in author_stats %}
-            <tr>
-                <td>{{ stat.author }}</td>
-                <td>{{ stat.count }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+        <div class="module">
+            <h2>여행지 리뷰 분포</h2>
+            <canvas id="travelChart"></canvas>
+        </div>
 
-<div class="container">
-    <h2>여행지 리뷰 분포</h2>
-    <canvas id="travelChart"></canvas>
-</div>
+        <div class="module">
+            <h2>작성자별 리뷰 분포</h2>
+            <canvas id="authorChart"></canvas>
+        </div>
+    </div>
 
-<div class="container">
-    <h2>작성자별 리뷰 분포</h2>
-    <canvas id="authorChart"></canvas>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // Travel chart
-    const travelCtx = document.getElementById('travelChart').getContext('2d');
-    const travelChart = new Chart(travelCtx, {
-        type: 'bar',
-        data: {
-            labels: [{% for stat in destination_stats %}'{{ stat.title }}',{% endfor %}],
-            datasets: [{
-                label: '리뷰 수',
-                data: [{% for stat in destination_stats %}{{ stat.count }},{% endfor %}],
-                backgroundColor: 'rgba(52, 152, 219, 0.6)',
-                borderColor: 'rgba(52, 152, 219, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Travel chart
+        const travelCtx = document.getElementById('travelChart').getContext('2d');
+        const travelChart = new Chart(travelCtx, {
+            type: 'bar',
+            data: {
+                labels: [{% for stat in destination_stats %}'{{ stat.title }}',{% endfor %}],
+                datasets: [{
+                    label: '리뷰 수',
+                    data: [{% for stat in destination_stats %}{{ stat.count }},{% endfor %}],
+                    backgroundColor: 'rgba(121, 174, 200, 0.6)',
+                    borderColor: 'rgba(121, 174, 200, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
 
-    // Author chart
-    const authorCtx = document.getElementById('authorChart').getContext('2d');
-    const authorChart = new Chart(authorCtx, {
-        type: 'bar',
-        data: {
-            labels: {{ author_names|safe }},
-            datasets: [{
-                label: '리뷰 수',
-                data: {{ review_counts|safe }},
-                backgroundColor: 'rgba(46, 204, 113, 0.6)',
-                borderColor: 'rgba(46, 204, 113, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
+        // Author chart
+        const authorCtx = document.getElementById('authorChart').getContext('2d');
+        const authorChart = new Chart(authorCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ author_names|safe }},
+                datasets: [{
+                    label: '리뷰 수',
+                    data: {{ review_counts|safe }},
+                    backgroundColor: 'rgba(121, 174, 200, 0.6)',
+                    borderColor: 'rgba(121, 174, 200, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
-</script>
-
+        });
+    </script>
 </body>
 </html>
