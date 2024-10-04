@@ -1,0 +1,223 @@
+/* 웹 폰트 import */
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+/* 전체 페이지 스타일 */
+body {
+  font-family: 'Nanum Gothic', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  color: #333;
+  font-weight: 400;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+/* 헤더 스타일 */
+header {
+  background-color: #ffffff;
+  color: #000000;
+  text-align: center;
+  padding: 1.5rem 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+/* 네비게이션 바 스타일 */
+nav {
+  background-color:white;
+  padding: 0.8rem 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.menu-container {
+  padding: 0.5rem 2rem;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+nav ul li {
+  margin: 0 1.2rem;
+}
+
+nav ul li a {
+  color: #000000;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: #007bff;
+}
+
+.logout-button {
+  position: absolute;
+  right: 20px;
+}
+
+.logout-button a {
+  color: #000000;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.logout-button a:hover {
+  color: #007bff;
+}
+/* 메인 콘텐츠 영역 */
+main {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* 지도 스타일 */
+#map {
+  width: 100%;
+  height: 600px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* 로거 스타일 */
+#logger {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+/* 인포윈도우 스타일 */
+.infowindow {
+  cursor: pointer;
+  padding: 0.8rem;
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.infowindow a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.infowindow a:hover {
+  text-decoration: underline;
+}
+
+/* 푸터 스타일 */
+footer {
+  background-color: #343a40;
+  color: #ffffff;
+  text-align: center;
+  padding: 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav ul li {
+    margin: 0.5rem 0;
+  }
+
+  #map {
+    height: 400px;
+  }
+}
+
+/* 링크 스타일 */
+a {
+  color: #3498db;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* 버튼 텍스트 스타일 */
+button, .btn {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+}
+
+/* 폰트 크기 조정 */
+h1 { font-size: 2.5em; }
+h2 { font-size: 2em; }
+h3 { font-size: 1.75em; }
+h4 { font-size: 1.5em; }
+h5 { font-size: 1.25em; }
+h6 { font-size: 1em; }
+
+/* 작은 텍스트 스타일 */
+.small-text {
+  font-size: 0.875em;
+}
+
+/* 제목 스타일 */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* 추가 스타일 */
+/* .post-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.post-item {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.post-item h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.post-item p {
+  font-size: 1em;
+  margin-bottom: 20px;
+}
+
+.post-item a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.post-item a:hover {
+  text-decoration: underline;
+} */
