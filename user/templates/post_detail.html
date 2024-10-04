@@ -7,7 +7,6 @@
       <p>{{ object.content }}</p>
     </div>
 
-<<<<<<< Updated upstream
     <p>Location: {{ object.location }}</p>
 
     {% if object.image %}
@@ -18,13 +17,7 @@
     <p>Created at: {{ object.created_at }}</p>
 
     <a href="{% url 'post-edit' object.pk %}">Edit</a> |
-=======
-   <!-- 로그인한 사용자가 게시글의 작성자인지 확인 -->
-  {% if request.user == object.author %}
-    <a href="{% url 'post-edit' object.pk %}">Edit</a> /
->>>>>>> Stashed changes
     <a href="{% url 'post-delete' object.pk %}">Delete</a> <br>
-  {% endif %}
 
     <a href="{% url 'post-list' %}">Back to list</a>
   </div>
