@@ -19,17 +19,9 @@
     <p class="post-author">Author: {{ object.author }}</p>
     <p class="post-created-at">Created at: {{ object.created_at }}</p>
 
-<<<<<<< HEAD
-    {% if request.user == object.author %}
-      <div class="post-actions">
-        <a class="edit-link" href="{% url 'post-edit' object.pk %}">Edit</a> |
-        <a class="delete-link" href="{% url 'post-delete' object.pk %}">Delete</a>
-      </div>
-=======
     {% if request.user.username == object.author %}
         <a href="{% url 'post-edit' object.pk %}">Edit</a> |
         <a href="{% url 'post-delete' object.pk %}">Delete</a> <br>
->>>>>>> ff1c9c35676f9caba4d733f46f8d30b22b1c03c4
     {% endif %}
 
     <a class="back-link" href="{% url 'post-list' %}">Back to list</a>
