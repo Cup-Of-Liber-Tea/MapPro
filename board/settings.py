@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'user',
     'users',   ######추가함(남승수)
     'travel',
+    'data'
 ]
 
 MIDDLEWARE = [
