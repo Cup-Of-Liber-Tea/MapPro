@@ -1,13 +1,97 @@
 {% extends 'base.html' %}
-{% block content %}
-  <h2>Are you sure you want to delete "{{ object.title }}"?</h2>
-  <form method="POST">
-    {% csrf_token %}
-    <button type="submit">Yes, delete</button>
-  </form>
-  <a href="{% url 'post-list' %}">Cancel</a>
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'user/css/delete.css' %}">
 {% endblock %}
 
-{% load static %}
-<!-- 사용자 정의 CSS 파일 추가 -->
-<link rel="stylesheet" href="{% static 'user/css/delete.css' %}">
+{% block content %}
+<style>
+  /* delete.css */
+
+.delete-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+h2 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.delete-btn, .cancel-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.delete-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #c0392b;
+}
+
+.cancel-btn {
+  background-color: #3498db;
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.cancel-btn:hover {
+  background-color: #2980b9;
+}
+
+.delete-btn:active, .cancel-btn:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 600px) {
+  .delete-container {
+    margin: 20px;
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .delete-btn, .cancel-btn {
+    width: 100%;
+  }
+}
+</style>
+<div class="delete-container">
+  <h2>정말로 "{{ object.title }}"을(를) 삭제하시겠습니까?</h2>
+  <div class="button-group">
+    <form method="POST">
+      {% csrf_token %}
+      <button type="submit" class="delete-btn">예, 삭제합니다</button>
+    </form>
+    <a href="{% url 'post-list' %}" class="cancel-btn">취소</a>
+  </div>
+</div>
+{% endblock %}

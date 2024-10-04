@@ -1,29 +1,34 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-  <link rel="stylesheet" href="{% static 'user/css/detail.css' %}">
+  <link rel="stylesheet" href="{% static 'user/css/detail2.css' %}">
 
   <div class="post-detail-container">
-    <h2 class="post-title">{{ object.title }}</h2>
+    <div class="post-header">
+      <h2 class="post-title">{{ object.title }}</h2>
+      <a href="{% url 'post-list' %}" class="back-button">&larr; 목록으로</a>
+    </div>
+
+    <div class="post-meta">
+      <span class="post-author">작성자: {{ object.author }}</span>
+      <span class="post-created-at">작성 시간: {{ object.created_at|date:"Y년 m월 d일 H:i" }}</span>
+    </div>
+
+    <p class="post-location">위치: {{ object.location }}</p>
+
+    {% if object.image %}
+      <img class="post-image" src="{{ object.image.url }}" alt="{{ object.title }}의 이미지">
+    {% endif %}
 
     <div class="post-content">
       <p>{{ object.content }}</p>
     </div>
 
-    <p class="post-location">Location: {{ object.location }}</p>
-
-    {% if object.image %}
-      <img class="post-image" src="{{ object.image.url }}" alt="Image for {{ object.title }}">
-    {% endif %}
-
-    <p class="post-author">Author: {{ object.author }}</p>
-    <p class="post-created-at">Created at: {{ object.created_at }}</p>
-
-    {% if request.user.username == object.author %}
-        <a href="{% url 'post-edit' object.pk %}">Edit</a> |
-        <a href="{% url 'post-delete' object.pk %}">Delete</a> <br>
-    {% endif %}
-
-    <a class="back-link" href="{% url 'post-list' %}">Back to list</a>
+    <div class="action-links">
+      {% if request.user.username == object.author %}
+        <a href="{% url 'post-edit' object.pk %}" class="edit-link">수정</a>
+        <a href="{% url 'post-delete' object.pk %}" class="delete-link">삭제</a>
+      {% endif %}
+    </div>
   </div>
 {% endblock %}

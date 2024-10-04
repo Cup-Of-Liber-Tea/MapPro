@@ -1,51 +1,174 @@
 {% extends 'base.html' %}
 {% block content %}
-  <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-    <h2>{% if object %}Edit Post{% else %}New Post{% endif %}</h2>
-    <form method="POST" enctype="multipart/form-data" style="width: 100%; max-width: 400px;">
-      {% csrf_token %}
+<style>
+  /* 전체 페이지 스타일 */
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+  }
 
-      <!-- Title Field -->
-      <div style="display: flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
-        <label style="width: 100px;">Title</label>
-        {{ form.title }}
-      </div>
+  /* 컨테이너 스타일 */
+  .post-form-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
 
-      <!-- Content Field -->
-      <div style="display: flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
-      <label style="width: 100px;">Content</label>
-      <textarea name="content" style="width: 1000px; height: 300px; padding: 5px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;">{{ form.content.value }}</textarea>
-      </div>
+  /* 제목 스타일 */
+  h2 {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
 
-      <!-- Location Field -->
-      <div style="display: flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
-        <label style="width: 100px;">Location</label>
-        {{ form.location }}
-      </div>
+  /* 폼 스타일 */
+  form {
+    display: flex;
+    flex-direction: column;
+  }
 
-      <!-- Image Field -->
-      <div style="margin-bottom: 10px;">
-      <label style="display: block; width: 100px;">Image</label>
+  /* 입력 필드 컨테이너 */
+  .form-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 라벨 스타일 */
+  label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #34495e;
+  }
+
+  /* 입력 필드 공통 스타일 */
+  input[type="text"],
+  input[type="date"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+
+  input[type="text"]:focus,
+  input[type="date"]:focus,
+  textarea:focus,
+  select:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  }
+
+  /* 텍스트 영역 스타일 */
+  textarea {
+    min-height: 150px;
+    resize: vertical;
+  }
+
+  /* 파일 입력 스타일 */
+  input[type="file"] {
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+
+  /* 버튼 스타일 */
+  button[type="submit"] {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    align-self: flex-start;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #2980b9;
+  }
+
+  /* 링크 스타일 */
+  a {
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+  }
+
+  /* 반응형 디자인 */
+  @media (max-width: 600px) {
+    .post-form-container {
+      padding: 1rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea,
+    select {
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<div class="post-form-container">
+  <h2>{% if object %}게시물 수정{% else %}새 게시물{% endif %}</h2>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="title">제목</label>
+      {{ form.title }}
+    </div>
+
+    <div class="form-group">
+      <label for="content">내용</label>
+      <textarea name="content" id="content">{{ form.content.value }}</textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="location">위치</label>
+      {{ form.location }}
+    </div>
+
+    <div class="form-group">
+      <label for="image">이미지</label>
       {{ form.image }}
-      </div>
+    </div>
 
-      <!-- Birthdate Field (using <input type="date">) -->
-      <div style="display: flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
-        <label style="width: 100px;">Birthdate</label>
-        <input type="date" name="birthdate" id="birthdate" value="{{ form.birthdate.value|default_if_none:'' }}" required>
-      </div>
+    <div class="form-group">
+      <label for="birthdate">생년월일</label>
+      <input type="date" name="birthdate" id="birthdate" value="{{ form.birthdate.value|default_if_none:'' }}" required>
+    </div>
 
-      <!-- Gender Field -->
-      <div style="display: flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
-        <label style="width: 100px;">Gender</label>
-        {{ form.gender }}
-      </div>
+    <div class="form-group">
+      <label for="gender">성별</label>
+      {{ form.gender }}
+    </div>
 
-      <button type="submit" style="margin-top: 10px;">Save</button>
-    </form>
+    <button type="submit">저장</button>
+  </form>
 
-    <br>
-    <a href="{% url 'post-list' %}" style="margin-top: 20px; display: inline-block;">Back to list</a>
-    </br>
-  </div>
+  <a href="{% url 'post-list' %}">목록으로 돌아가기</a>
+</div>
 {% endblock %}
