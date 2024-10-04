@@ -22,12 +22,13 @@ class PostDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['reviews'] = Post.objects.filter(location=self.object.location)  # 해당 위치의 리뷰
+        context['related_posts'] = Post.objects.filter(sele=self.object.sele).exclude(pk=self.object.pk)[:5]  # 같은 sele 값을 가진 다른 포스트
         return context
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = 'post_form.html'
-    fields = ['title', 'content', 'location', 'image', 'gender']  # birthdate 필드는 제거
+    fields = ['title','sele', 'content', 'location', 'image', 'gender']  # birthdate 필드는 제거
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -44,7 +45,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     template_name = 'post_form.html'
-    fields = ['title', 'content', 'location', 'image', 'gender']  # birthdate 필드는 제거
+    fields = ['title','sele', 'content', 'location', 'image', 'gender']  # birthdate 필드는 제거
 
     def get_queryset(self):
         return super().get_queryset().filter(author=self.request.user)
