@@ -78,3 +78,6 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 
 def homework1(reqeust):
     return render(reqeust, '과제1크롤.html')
+
+def homework2(reqeust):
+    return render(reqeust, '장고과제2.html')
