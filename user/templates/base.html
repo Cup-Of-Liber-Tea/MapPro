@@ -77,32 +77,29 @@
 </head>
 
 <body>
-      <header style="display: flex; align-items: center; justify-content: center;">
-        <div>
-            <img src="/media/documents/경주시청.png" alt="Gyeongju" style="width: 100px; height: auto; margin-right: 5px;"> <!-- margin-right 값 줄임 -->
+    <header style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center;">
+            <img src="/media/documents/경주시청.png" alt="Gyeongju" style="width: 100px; height: auto; margin-right: 0px; margin-left: 250px;">
+            <div style="text-align: left;">
+                <h1 style="margin: 0; font-size: 1.5em;">경주 한 바퀴</h1>
+                <h2 style="font-size: 0.8em; color: gray; margin-top: 0;">A Tour Around Gyeongju</h2>
+            </div>
         </div>
-        <div style="text-align: center;">
-            <h1 style="margin-bottom: 3px;">경주 한 바퀴</h1> <!-- 큰 글씨와 작은 글씨 간격 줄이기 -->
-            <h2 style="font-size: 0.8em; color: gray; margin-top: 0;">A Tour Around Gyeongju</h2> <!-- 간격 줄이기 -->
-        </div>
+            <nav style="flex-grow: 1; display: flex; justify-content: flex-start; margin-left: 130px;"> <!-- 왼쪽 여백을 더 추가 -->
+                <div class="menu-container">
+                    <ul style="display: flex; margin: 0; padding: 0; list-style: none;"> <!-- border: none; 제거 -->
+                        <li><a href="/" style="text-decoration: none;">리뷰</a></li>
+                        <li><a href="{% url 'tourist_list' %}" style="text-decoration: none;">travel</a></li>
+                        <li><a href="/data" style="text-decoration: none;">데이터</a></li>
+                        <li><a href="/work1" style="text-decoration: none;">과제1</a></li>
+                        <li><a href="/work2" style="text-decoration: none;">과제2</a></li>
+                    </ul>
+                </div>
+                <div class="logout-button" style="margin-right: 50px;"> <!-- 로그아웃 버튼과 메뉴 간 여백 추가 -->
+                    <a href="{% url 'logout' %}" style="font-size: 0.8em ">로그아웃</a>
+                </div>
+            </nav>
     </header>
-
-
-    <nav>
-        <div class="menu-container">
-            <ul>
-                <li><a href="/">리뷰</a></li>
-                <li><a href="{% url 'tourist_list' %}">travel</a></li>
-                <li><a href="/data">데이터</a></li>
-                <li><a href="/work1">과제1</a></li>
-                <li><a href="/work2">과제2</a></li>
-                <!-- <li><a href="{% url 'admin:index' %}">어드민</a></li> -->
-            </ul>
-        </div>
-        <div class="logout-button">
-            <a href="{% url 'logout' %}">로그아웃</a>
-        </div>
-    </nav>
 
     <main>
         {% block content %}
