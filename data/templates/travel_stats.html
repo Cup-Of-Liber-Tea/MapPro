@@ -70,7 +70,8 @@
 <body>
     <div id="container">
         <h1>여행 데이터 분석 대시보드</h1>
-        
+
+        <!--여행지별 리뷰스 데이터프레임-->
         <div class="module">
             <h2>인기 여행지 통계</h2>
             <table>
@@ -91,6 +92,7 @@
             </table>
         </div>
 
+        <!-- 작성자별 리뷰 수 데이터프레임-->
         <div class="module">
             <h2>작성자별 리뷰 통계</h2>
             <table>
@@ -111,18 +113,87 @@
             </table>
         </div>
 
+<!--        성별 리뷰 수 데이터 프레임-->
+        <div class="module">
+            <h2>성별 리뷰 통계</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>성별</th>
+                        <th>리뷰 수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in gender_stats %}
+                    <tr>
+                        <td>{{ stat.gender }}</td>
+                        <td>{{ stat.count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+        <!--        나이별 리뷰 수 데이터 프레임-->
+        <div class="module">
+            <h2>나이별 리뷰 통계</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>출생년도</th>
+                        <th>리뷰 수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in birthdate_stats %}
+                    <tr>
+                        <td>{{ stat.year }}</td>
+                        <td>{{ stat.count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+
+
+
+
+<!--        여행지별 리뷰 수 그래프-->
         <div class="module">
             <h2>여행지 리뷰 분포</h2>
             <canvas id="travelChart"></canvas>
         </div>
 
+<!--        작성자별 리뷰 수 그래프-->
         <div class="module">
             <h2>작성자별 리뷰 분포</h2>
             <canvas id="authorChart"></canvas>
         </div>
     </div>
 
+
+    <!-- 성별별 리뷰 수 그래프 -->
+    <div class="module">
+        <h2>성별 리뷰 분포</h2>
+        <canvas id="genderChart"></canvas>
+    </div>
+
+
+    <!-- 나이별 리뷰 수 그래프 -->
+    <div class="module">
+        <h2>나이별 리뷰 분포</h2>
+        <canvas id="ageChart"></canvas>
+    </div>
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <script>
         // Travel chart
         const travelCtx = document.getElementById('travelChart').getContext('2d');
@@ -153,7 +224,7 @@
         const authorChart = new Chart(authorCtx, {
             type: 'bar',
             data: {
-                labels: {{ author_names|safe }},
+                labels: {{ author_list|safe }},
                 datasets: [{
                     label: '리뷰 수',
                     data: {{ review_counts|safe }},
@@ -171,6 +242,78 @@
                 }
             }
         });
+
+
+        // 성별 리뷰 수 차트
+        const genderCtx = document.getElementById('genderChart').getContext('2d');
+        const genderChart = new Chart(genderCtx, {
+            type: 'pie',  // 성별 분포는 파이 차트가 더 적합할 수 있습니다.
+            data: {
+                labels: {{ gender_labels|safe }},  // 성별 이름 리스트
+                datasets: [{
+                    label: '리뷰 수',
+                    data: {{ gender_counts|safe }},  // 각 성별별 리뷰 수
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',  // 색상 선택
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 206, 86, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    },
+                    datalabels: {
+                        color: '#fff',  // 라벨 색상 (예: 흰색)
+                        anchor: 'end',  // 조각의 끝에 배치
+                        align: 'end',   // 조각의 끝에 맞춰 정렬
+                        formatter: (value, context) => {
+                            let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            let percentage = (value / total * 100).toFixed(1);  // 소수점 첫째 자리까지
+                            return percentage + '%';  // 퍼센티지 표시
+                        }
+                    }
+                }
+            }
+        });
+
+
+            // 나이별 리뷰 수 차트
+        const ageCtx = document.getElementById('ageChart').getContext('2d');
+        const ageChart = new Chart(ageCtx, {
+            type: 'bar',  // 막대그래프
+            data: {
+                labels: [{% for stat in age_df %}'{{ stat.age }}'{% if not forloop.last %}, {% endif %}{% endfor %}],  // 나이 리스트
+                datasets: [{
+                    label: '리뷰 수',
+                    data: [{% for stat in age_df %}{{ stat.count }}{% if not forloop.last %}, {% endif %}{% endfor %}],  // 각 나이별 리뷰 수
+                    backgroundColor: 'rgba(121, 174, 200, 0.6)',
+                    borderColor: 'rgba(121, 174, 200, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
     </script>
 </body>
 </html>
