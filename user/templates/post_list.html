@@ -99,6 +99,35 @@
         font-weight: bold;
         font-size: 18px;
     }
+/* 수정된 스타일 */
+.post-item {
+        position: relative;
+        padding: 25px;
+        border-bottom: 1px solid #eee;
+        min-height: 120px; /* 썸네일 높이보다 약간 더 크게 설정 */
+    }
+    .post-thumbnail {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 100px;
+        height: 100px;
+        overflow: hidden;
+        border-radius: 5px;
+    }
+    .post-thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .post-details {
+        margin-right: 120px; /* 썸네일 너비 + 여백 */
+    }
+    .post-meta {
+        font-size: 14px;
+        color: #666;
+        margin-top: 5px;
+    }
 </style>
 
 <div class="post-list">
@@ -114,13 +143,25 @@
 
     {% for post in posts %}
     <div class="post-item">
-        <div class="post-title-container">
-            <a href="{% url 'post-detail' post.pk %}" class="post-title">{{ post.title }}</a>
+        <div class="post-thumbnail">
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }} thumbnail">
+            {% else %}
+                <img src="{% static 'default_thumbnail.jpg' %}" alt="Default thumbnail">
+            {% endif %}
         </div>
-        <div class="post-content">
-            {{ post.content|truncatewords:30 }} <!-- 본문 내용 -->
+        <div class="post-details">
+            <div class="post-title-container">
+                <a href="{% url 'post-detail' post.pk %}" class="post-title">{{ post.title }}</a>
+            </div>
+            <div class="post-content">
+                {{ post.content|truncatewords:30 }}
+            </div>
+            <div class="post-meta">
+                <span class="post-author">작성자: {{ post.author }}</span>
+                <span class="post-date">등록일: {{ post.created_at|date:"Y-m-d H:i" }}</span>
+            </div>
         </div>
-        <span class="post-author">작성자: {{ post.author }}</span>
     </div>
     {% endfor %}
 
