@@ -7,7 +7,6 @@
     <title>여행 데이터 분석</title>
     <style>
         body {
-            font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
             margin: 0;
             padding: 0;
             color: #333;
@@ -21,7 +20,6 @@
         h1 {
             font-weight: 300;
             font-size: 24px;
-            color: #666;
             padding: 0 10px;
             margin-bottom: 20px;
         }
@@ -40,6 +38,12 @@
             margin: 0;
             padding: 10px;
             text-transform: uppercase;
+        }
+        .analysis {
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-top: 20px;
         }
         table {
             border-collapse: collapse;
@@ -71,7 +75,10 @@
     <div id="container">
         <h1>여행 데이터 분석 대시보드</h1>
 
+<<<<<<< HEAD
         <!--여행지별 리뷰스 데이터프레임-->
+=======
+>>>>>>> 04d5ce40a2ed75c26bf72831bf7a672bd0b14b86
         <div class="module">
             <h2>인기 여행지 통계</h2>
             <table>
@@ -173,6 +180,27 @@
         <div class="module">
             <h2>작성자별 리뷰 분포</h2>
             <canvas id="authorChart"></canvas>
+        </div>
+
+        <div class="module analysis">
+            <h2>EDA 분석 결과</h2>
+            <p><strong>여행지별 리뷰 수 분석:</strong></p>
+            <ul>
+                <li><strong>동궁과 월지</strong>: 리뷰 4개로 가장 많은 리뷰가 작성된 여행지입니다.</li>
+                <li><strong>경주 스파월드</strong>: 리뷰 3개로 두 번째로 많이 리뷰된 여행지입니다.</li>
+                <li><strong>불국사, 무열왕릉, 교촌마을</strong> 등 여러 문화유적지에 리뷰 2개씩 작성되었습니다.</li>
+                <li>리뷰가 1개씩 작성된 여행지도 다수 존재합니다. 이는 <strong>인지도나 방문율이 상대적으로 낮음</strong>을 시사합니다.</li>
+                <li>리뷰가 많이 작성된 여행지는 주로 경주의 주요 명소들로, <strong>여행객들이 주로 방문하는 장소</strong>라는 점을 알 수 있습니다.</li>
+                <li>반면, 리뷰 수가 적은 장소들은 상대적으로 덜 알려졌거나 <strong>특정한 방문 목적</strong>을 가진 여행지일 가능성이 있습니다.</li>
+            </ul>
+            <p><strong>작성자별 리뷰 통계 분석:</strong></p>
+            <ul>
+                <li><strong>dmswl, entks</strong>: 각각 8개의 리뷰로 가장 활발하게 활동한 사용자입니다.</li>
+                <li>리뷰 수가 4개인 중간 활동자들이 있으며, 리뷰 1개만 작성한 <strong>noah</strong>는 활동이 적습니다.</li>
+                <li>리뷰 수가 많은 사용자는 여행 커뮤니티 내에서 매우 <strong>활발하게 활동</strong>하는 것으로 보이며, 이들의 리뷰가 커뮤니티 내에서 <strong>많은 정보를 제공</strong>하고 있을 가능성이 큽니다.</li>
+                <li>리뷰 수가 적은 사용자는 <strong>특정 여행지만 리뷰</strong>하는 경향이 있을 수 있습니다.</li>
+            </ul>
+            <p>이러한 리뷰 분포는 특정 여행지와 사용자에 집중되어 있으며, 이는 인기 관광지와 커뮤니티 내 주요 활동자들의 영향력을 나타냅니다.</p>
         </div>
     </div>
 
