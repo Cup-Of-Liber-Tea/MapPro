@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from user.views import homework1
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -9,6 +10,7 @@ urlpatterns = [
     path("", include('users.urls')),     ############ 추가 함(남승수)
     path("travel/", include('travel.urls')),
     path("data/", include('data.urls')),
+    path("work1/", homework1), 
 ]
 
 if settings.DEBUG:

@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -72,3 +73,8 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return super().get_queryset().filter(author=self.request.user)
+    
+
+
+def homework1(reqeust):
+    return render(reqeust, '과제1크롤.html')
