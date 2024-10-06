@@ -11,8 +11,8 @@
 데이터 분석: 수집된 리뷰 데이터를 바탕으로 인기 여행지, 방문 패턴 등을 분석합니다.
 사용자 프로필: 개인화된 사용자 프로필을 통해 작성한 리뷰를 관리하고 다른 사용자와 소통할 수 있습니다.
 기술 스택
-프론트엔드: HTML, CSS, JavaScript
-백엔드: django
-데이터베이스: sqlite3
-지도 API: 네이버, 카카오맵 api
-데이터 분석: Python, Pandas, Matplotlib...
+-- 프론트엔드: HTML, CSS, JavaScript
+-- 백엔드: django
+-- 데이터베이스: sqlite3
+-- 지도 API: 네이버, 카카오맵 api
+-- 데이터 분석: Python, Pandas, Matplotlib...
