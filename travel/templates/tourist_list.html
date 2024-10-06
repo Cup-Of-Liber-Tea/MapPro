@@ -2,70 +2,105 @@
 {% block content %}
 
 <style>
-        * {
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        .slider {
-            position: relative;
-            width: 100%; /* 전체 화면 너비 사용 */
-            overflow: hidden;
-        }
+    .slider {
+        position: relative;
+        width: 100%; /* 전체 화면 너비 사용 */
+        overflow: hidden;
+    }
 
-        .slides {
-            display: flex;
-            transition: transform 0.5s ease;
-        }
+    .slides {
+        display: flex;
+        transition: transform 0.5s ease;
+    }
 
-        .slide {
-            min-width: 100%; /* 각 슬라이드가 전체 너비를 차지하도록 설정 */
-        }
+    .slide {
+        min-width: 100%; /* 각 슬라이드가 전체 너비를 차지하도록 설정 */
+        position: relative;
+    }
 
-        .slide img {
-            width: 100%; /* 이미지 너비를 전체 슬라이드에 맞춤 */
-            height: 500px; /* 원하는 높이로 설정 (예: 300px) */
-            object-fit: cover; /* 이미지 비율을 유지하면서 잘림 */
-        }
+    .slide img {
+        width: 100%; /* 이미지 너비를 전체 슬라이드에 맞춤 */
+        height: 500px; /* 원하는 높이로 설정 */
+        object-fit: cover; /* 이미지 비율을 유지하면서 잘림 */
+    }
 
-        .dots {
-            text-align: center; /* 점을 가운데 정렬 */
-            position: absolute; /* 슬라이더에 대해 위치 지정 */
-            bottom: 10px; /* 슬라이더 하단으로부터의 거리 */
-            left: 50%;
-            transform: translateX(-50%); /* 가운데 정렬을 위한 변환 */
-        }
+    /* 슬라이드 텍스트 추가 */
+    .slide-text {
+        position: absolute;
+        top: 50%; /* 이미지의 중앙에 배치 */
+        left: 10%;
+        transform: translate(-50%, -50%); /* 중앙 정렬 */
+        color: white; /* 텍스트 색상 */
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.0); /* 배경을 반투명하게 */
+        padding: 10px;
+        border-radius: 10px;
+        text-shadow: 2px 2px 4px black; /* 텍스트 테두리처럼 보이는 효과 */
+    }
 
-        .dot {
-            display: inline-block; /* 점을 나란히 배치 */
-            height: 10px; /* 점의 높이 */
-            width: 10px; /* 점의 너비 */
-            margin: 0 5px; /* 점 사이의 간격 */
-            background-color: #bbb; /* 기본 점 색상 */
-            border-radius: 50%; /* 점을 둥글게 */
-            cursor: pointer; /* 커서 스타일 변경 */
-        }
+    .slide-title {
+        font-size: 2em;
+        margin: 0;
+    }
 
-        .active {
-            background-color: #717171; /* 활성화된 점 색상 */
-        }
-    </style>
-<header>
+    .slide-description {
+        font-size: 1.2em;
+    }
+
+    .dots {
+        text-align: center;
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .dot {
+        display: inline-block;
+        height: 10px;
+        width: 10px;
+        margin: 0 5px;
+        background-color: #bbb;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .active {
+        background-color: #717171;
+    }
+</style>
 
 <div class="slider">
     <div class="slides">
         <div class="slide">
             <img src="/media/documents/첨성대 봄.jpg" alt="슬라이드 이미지 1">
+            <div class="slide-text">
+                <h2 class="slide-title">첨성대의 봄</h2>
+                <p class="slide-description">경주에서 만나는 아름다운 봄 풍경</p>
+            </div>
         </div>
         <div class="slide">
             <img src="/media/documents/월정교.jpg" alt="슬라이드 이미지 2">
+            <div class="slide-text">
+                <h2 class="slide-title">월정교의 밤</h2>
+                <p class="slide-description">화려한 불빛 아래 경주의 전통미</p>
+            </div>
         </div>
         <div class="slide">
             <img src="/media/documents/대릉원.jpg" alt="슬라이드 이미지 3">
+            <div class="slide-text">
+                <h2 class="slide-title">대릉원의 역사</h2>
+                <p class="slide-description">경주의 역사 속에서</p>
+            </div>
         </div>
     </div>
+
     <div class="dots">
-        <!-- 점 요소를 생성 -->
         <span class="dot" onclick="moveToSlide(0)"></span>
         <span class="dot" onclick="moveToSlide(1)"></span>
         <span class="dot" onclick="moveToSlide(2)"></span>
@@ -80,15 +115,12 @@
     function moveSlide(direction) {
         currentIndex += direction;
 
-
-        // 슬라이드 인덱스 조정
         if (currentIndex < 0) {
             currentIndex = totalSlides - 1;
         } else if (currentIndex >= totalSlides) {
             currentIndex = 0;
         }
 
-        // 슬라이드 이동
         updateSlide();
     }
 
@@ -101,23 +133,20 @@
         const slides = document.querySelector('.slides');
         slides.style.transform = `translateX(-${currentIndex * 100}%)`;
 
-        // 점 업데이트
         dots.forEach((dot, index) => {
             dot.classList.remove('active');
             if (index === currentIndex) {
                 dot.classList.add('active');
             }
         });
-
     }
 
-    // 자동 슬라이드 이동
     setInterval(() => {
         moveSlide(1);
     }, 3000); // 3초마다 슬라이드 이동
 </script>
-</header>
 
+<!-- 관광지 리스트 스타일 -->
 <style>
     .tourist-list-container {
         max-width: 1200px;
@@ -176,39 +205,12 @@
     .pagination .current {
         font-weight: bold;
     }
-.tourist-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3개의 열로 설정 */
-    gap: 20px; /* 카드 사이의 간격 */
-}
-
-.tourist-item {
-    border: 1px solid #ddd; /* 카드 테두리 */
-    border-radius: 10px; /* 모서리 둥글게 */
-    overflow: hidden; /* 내용 넘침 방지 */
-    transition: transform 0.2s; /* 마우스 오버 효과 */
-}
-
-.tourist-item:hover {
-    transform: scale(1.05); /* 마우스 오버 시 확대 */
-}
-
-.card-img-top {
-    width: 100%; /* 이미지 너비 100% */
-    height: 200px; /* 고정된 높이 */
-    object-fit: cover; /* 이미지 비율 유지 */
-    border-radius: 50%; /* 이미지를 동그랗게 만듭니다 */
-}
-
-.card-body {
-    padding: 15px; /* 내부 여백 */
-    text-align: center; /* 중앙 정렬 */
-}
-
-.card-title {
-    font-size: 18px; /* 제목 크기 */
-    margin: 0; /* 여백 제거 */
-}
+    .tourist-item {
+        transition: transform 0.2s;
+    }
+    .tourist-item:hover {
+        transform: scale(1.05);
+    }
 </style>
 
 <div class="tourist-list-container">
@@ -233,8 +235,7 @@
         {% endfor %}
     </div>
 
-
-    <form class="search-form" action="" method="get" style="margin-top:20px;">
+    <form class="search-form" action="" method="get">
         <input type="text" name="q" placeholder="여행지 검색" value="{{ query|default_if_none:'' }}">
         <button type="submit">검색</button>
     </form>
@@ -256,6 +257,6 @@
             {% endif %}
         {% endif %}
     </div>
-
 </div>
+
 {% endblock %}
