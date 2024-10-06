@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ tourist.name }} - 관광지 정보</title>
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=xhqofn9jhr"></script>
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/markerclusterer.js"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f26bd7545241d9c1ec2adeeb0b80900f"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
@@ -156,15 +155,15 @@
             .container {
                 padding: 10px;
             }
-            
+
             header {
                 padding: 30px 0;
             }
-            
+
             h1 {
                 font-size: 2em;
             }
-            
+
             .info-section, .map-section, .reviews {
                 padding: 20px;
             }
@@ -247,47 +246,51 @@
 
             if (matchingItem && matchingItem.CON_LATITUDE && matchingItem.CON_LONGITUDE) {
                 // 마커를 기준으로 지도를 설정합니다.
-                const markerPosition = new naver.maps.LatLng(matchingItem.CON_LATITUDE, matchingItem.CON_LONGITUDE);
+                var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                    mapOption = {
+                        center: new kakao.maps.LatLng(matchingItem.CON_LATITUDE, matchingItem.CON_LONGITUDE), // 마커 위치로 중심 설정
+                        level: 4 // 지도 확대 레벨
+                    };
 
-                var mapOptions = {
-                    center: markerPosition, // 마커 위치로 중심 설정
-                    zoom: 15 // 15로 설정하면 약 300m 범위를 표시
-                };
-
-                var map = new naver.maps.Map('map', mapOptions);
+                var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성
 
                 // 마커 추가
-                var marker = new naver.maps.Marker({
-                    position: markerPosition,
+                var marker = new kakao.maps.Marker({
+                    position: new kakao.maps.LatLng(matchingItem.CON_LATITUDE, matchingItem.CON_LONGITUDE),
                     map: map,
                     title: matchingItem.CON_TITLE
                 });
 
-                var infoWindow = new naver.maps.InfoWindow({
-                    content: `<h4>${matchingItem.CON_TITLE}</h4>`
+                var infowindow = new kakao.maps.InfoWindow({
+                    content: `<div style="padding:5px;">관광지 길찾기</div>` // 인포윈도우 내용 설정
                 });
 
-                // 마커 클릭 시 정보 창 표시
-                naver.maps.Event.addListener(marker, 'click', function() {
-                    infoWindow.open(map, marker);
+                // 마커 클릭 시 길찾기 페이지로 이동
+                kakao.maps.event.addListener(marker, 'click', function() {
+                    window.open(`https://map.kakao.com/link/to/${matchingItem.CON_TITLE},${matchingItem.CON_LATITUDE},${matchingItem.CON_LONGITUDE}`);
+                });
+
+                // 마커 오버 시 인포윈도우 표시
+                kakao.maps.event.addListener(marker, 'mouseover', function() {
+                    infowindow.open(map, marker);
+                });
+
+                // 마커 아웃 시 인포윈도우 닫기
+                kakao.maps.event.addListener(marker, 'mouseout', function() {
+                    infowindow.close();
                 });
             } else {
-                console.error("관광지를 찾을 수 없습니다.");
-                document.getElementById('logger').innerText = '관광지를 찾을 수 없습니다.';
+                alert("관광지를 찾을 수 없습니다.");
             }
         }
 
-        // API에서 관광지 정보 가져오기
-        fetchTouristSpots()
-            .then(data => {
-                if (data.response && data.response.body && data.response.body.items) {
-                    const items = data.response.body.items.item; // 올바른 데이터 접근
-                    initMap(items);
-                } else {
-                    console.error("데이터 구조가 예상과 다릅니다.");
-                }
-            })
-            .catch(error => console.error('데이터 로드 중 오류 발생:', error));
+        // 관광지 데이터 가져오기
+        fetchTouristSpots().then(data => {
+            const items = data.response.body.items.item;
+            initMap(items);
+        }).catch(error => {
+            console.error("에러:", error);
+        });
     </script>
 </body>
 </html>
