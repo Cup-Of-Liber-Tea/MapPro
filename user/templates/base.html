@@ -73,6 +73,9 @@
 </head>
 
 <body>
+    <div class="logout-button" style="margin-right: 50px;">
+        <a href="{% url 'logout' %}" style="font-size: 0.8em ">로그아웃</a>
+    </div>
     <div style="text-align: center;">
         <p style="font-size: 1.2em; color: gray;">경주에서의 특별한 순간을 경험해 보세요!</p> <!-- 추가된 부제목 -->
     </div>
@@ -94,9 +97,6 @@
                     <li><a href="/work1" style="text-decoration: none;">과제1</a></li>
                     <li><a href="/work2" style="text-decoration: none;">과제2</a></li>
                 </ul>
-            </div>
-            <div class="logout-button" style="margin-right: 50px;">
-                <a href="{% url 'logout' %}" style="font-size: 0.8em ">로그아웃</a>
             </div>
         </nav>
     </header>
