@@ -147,20 +147,6 @@
         background-color: #0056b3;
     }
 
-    .pagination {
-        text-align: center;
-        margin-top: 30px;
-    }
-    .pagination a {
-        padding: 5px 10px;
-        margin: 0 5px;
-        text-decoration: none;
-        color: #007bff;
-    }
-    .pagination .current {
-        font-weight: bold;
-    }
-
     /* 반응형 디자인 */
     @media (max-width: 768px) {
         .post-list-header {
@@ -233,23 +219,7 @@
     {% endfor %}
 
     <a href="{% url 'post-create' %}" class="create-post-link">Create a new post</a>
-    <div class="pagination">
-        {% if is_paginated %}
-            {% if page_obj.has_previous %}
-                <a href="?page=1{% if query %}&q={{ query }}{% endif %}">« 처음</a>
-                <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">이전</a>
-            {% endif %}
-
-            <span class="current">
-                페이지 {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
-            </span>
-
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">다음</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}">마지막 »</a>
-            {% endif %}
-        {% endif %}
-    </div>
+    
 </div>
 
 
@@ -281,6 +251,7 @@
 
         // 스크롤 효과
         // 스크롤 효과
+        '''
         window.addEventListener('scroll', function () {
             const scrollPosition = window.scrollY;
             const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -293,6 +264,7 @@
 
             document.body.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
         });
+        '''
     });
 </script>
 {% endblock %}
