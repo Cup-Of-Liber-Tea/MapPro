@@ -9,6 +9,7 @@ class PostListView(ListView):
     model = Post
     template_name = 'post_list.html'
     context_object_name = 'posts'
+    paginate_by = 6
 
     def get_queryset(self):
         query = self.request.GET.get('search')  # 'search'로 변경
