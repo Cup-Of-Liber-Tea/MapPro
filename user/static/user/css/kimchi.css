@@ -17,7 +17,6 @@ header {
   background-color: #ffffff;
   color: #000000;
   text-align: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 header h1 {
@@ -83,9 +82,9 @@ nav ul li a:hover {
 }
 /* 메인 콘텐츠 영역 */
 main {
-  max-width: 1200px;
+  /*max-width: 1200px;*/
   margin: 2rem auto;
-  padding: 0 1rem;
+  /*padding: 0 1rem;*/
 }
 
 /* 지도 스타일 */

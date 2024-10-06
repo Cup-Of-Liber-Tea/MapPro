@@ -2,6 +2,123 @@
 {% block content %}
 
 <style>
+        * {
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .slider {
+            position: relative;
+            width: 100%; /* 전체 화면 너비 사용 */
+            overflow: hidden;
+        }
+
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .slide {
+            min-width: 100%; /* 각 슬라이드가 전체 너비를 차지하도록 설정 */
+        }
+
+        .slide img {
+            width: 100%; /* 이미지 너비를 전체 슬라이드에 맞춤 */
+            height: 500px; /* 원하는 높이로 설정 (예: 300px) */
+            object-fit: cover; /* 이미지 비율을 유지하면서 잘림 */
+        }
+
+        .dots {
+            text-align: center; /* 점을 가운데 정렬 */
+            position: absolute; /* 슬라이더에 대해 위치 지정 */
+            bottom: 10px; /* 슬라이더 하단으로부터의 거리 */
+            left: 50%;
+            transform: translateX(-50%); /* 가운데 정렬을 위한 변환 */
+        }
+
+        .dot {
+            display: inline-block; /* 점을 나란히 배치 */
+            height: 10px; /* 점의 높이 */
+            width: 10px; /* 점의 너비 */
+            margin: 0 5px; /* 점 사이의 간격 */
+            background-color: #bbb; /* 기본 점 색상 */
+            border-radius: 50%; /* 점을 둥글게 */
+            cursor: pointer; /* 커서 스타일 변경 */
+        }
+
+        .active {
+            background-color: #717171; /* 활성화된 점 색상 */
+        }
+    </style>
+<header>
+
+<div class="slider">
+    <div class="slides">
+        <div class="slide">
+            <img src="/media/documents/첨성대 봄.jpg" alt="슬라이드 이미지 1">
+        </div>
+        <div class="slide">
+            <img src="/media/documents/월정교.jpg" alt="슬라이드 이미지 2">
+        </div>
+        <div class="slide">
+            <img src="/media/documents/대릉원.jpg" alt="슬라이드 이미지 3">
+        </div>
+    </div>
+    <div class="dots">
+        <!-- 점 요소를 생성 -->
+        <span class="dot" onclick="moveToSlide(0)"></span>
+        <span class="dot" onclick="moveToSlide(1)"></span>
+        <span class="dot" onclick="moveToSlide(2)"></span>
+    </div>
+</div>
+
+<script>
+    let currentIndex = 0;
+    const totalSlides = document.querySelectorAll('.slide').length;
+    const dots = document.querySelectorAll('.dot');
+
+    function moveSlide(direction) {
+        currentIndex += direction;
+
+
+        // 슬라이드 인덱스 조정
+        if (currentIndex < 0) {
+            currentIndex = totalSlides - 1;
+        } else if (currentIndex >= totalSlides) {
+            currentIndex = 0;
+        }
+
+        // 슬라이드 이동
+        updateSlide();
+    }
+
+    function moveToSlide(index) {
+        currentIndex = index;
+        updateSlide();
+    }
+
+    function updateSlide() {
+        const slides = document.querySelector('.slides');
+        slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+        // 점 업데이트
+        dots.forEach((dot, index) => {
+            dot.classList.remove('active');
+            if (index === currentIndex) {
+                dot.classList.add('active');
+            }
+        });
+
+    }
+
+    // 자동 슬라이드 이동
+    setInterval(() => {
+        moveSlide(1);
+    }, 3000); // 3초마다 슬라이드 이동
+</script>
+</header>
+
+<style>
     .tourist-list-container {
         max-width: 1200px;
         margin: 0 auto;
@@ -117,7 +234,7 @@
     </div>
 
 
-    <form class="search-form" action="" method="get">
+    <form class="search-form" action="" method="get" style="margin-top:20px;">
         <input type="text" name="q" placeholder="여행지 검색" value="{{ query|default_if_none:'' }}">
         <button type="submit">검색</button>
     </form>

@@ -4,17 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript"
-        src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=xhqofn9jhr"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
-<style>
-    body {
-        font-family: 'Noto Sans KR', sans-serif;
-    }
-</style>
-
-
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=xhqofn9jhr"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
         #map {
             width: 50%;
             height: 600px;
@@ -28,7 +24,7 @@
         nav {
             background-color: #333;
             overflow: hidden;
-            height: 50px; /* 네브바 높이 조정 */
+            height: 50px;
         }
 
         nav ul {
@@ -36,35 +32,35 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center; /* 가운데 정렬 */
+            justify-content: center;
         }
 
         footer {
-            background-color: #333; /* 푸터 색상 */
+            background-color: #333;
             color: white;
             text-align: center;
             padding: 10px 0;
         }
 
         .infowindow {
-            cursor: pointer; /* 커서를 포인터로 변경하여 클릭 가능함을 나타냄 */
+            cursor: pointer;
         }
 
         nav ul li {
-            float: left; /* 메뉴 항목을 수평으로 배치 */
+            float: left;
         }
 
         nav ul li a {
             display: block;
-            color: white; /* 기본 글자 색상 */
+            color: white;
             text-align: center;
             padding: 14px 16px;
-            text-decoration: none; /* 밑줄 제거 */
-            transition: color 0.3s; /* 색상 변화에 애니메이션 추가 */
+            text-decoration: none;
+            transition: color 0.3s;
         }
 
         nav ul li a:hover {
-            color: #007bff; /* 마우스 오버 시 글자 색상 변경 */
+            color: #007bff;
         }
     </style>
 
@@ -73,37 +69,40 @@
     {% load static %}
 
     <!-- 사용자 정의 앱의 CSS 추가 -->
-    <link rel="stylesheet" href="{% static 'user/css/kimchi.css' %}"> <!-- 김치css추가 ㅎㅎ -->
+    <link rel="stylesheet" href="{% static 'user/css/kimchi.css' %}">
 </head>
 
 <body>
-    <header style="display: flex; align-items: center; justify-content: space-between;">
+    <div style="text-align: center;">
+        <p style="font-size: 1.2em; color: gray;">경주에서의 특별한 순간을 경험해 보세요!</p> <!-- 추가된 부제목 -->
+    </div>
+
+    <header style="display: flex; align-items: center; justify-content: space-between; margin-top: 30px;"> <!-- margin-top 추가 -->
         <div style="display: flex; align-items: center;">
             <img src="/media/documents/경주시청.png" alt="Gyeongju" style="width: 100px; height: auto; margin-right: 0px; margin-left: 250px;">
-            <div style="text-align: left;">
+            <div style="text-align: left;" >
                 <h1 style="margin: 0; font-size: 1.5em;">경주 한바퀴</h1>
                 <h2 style="font-size: 0.8em; color: gray; margin-top: 0;">A Tour Around Gyeongju</h2>
             </div>
         </div>
-            <nav style="flex-grow: 1; display: flex; justify-content: flex-start; margin-left: 130px;"> <!-- 왼쪽 여백을 더 추가 -->
-                <div class="menu-container">
-                    <ul style="display: flex; margin: 0; padding: 0; list-style: none;"> <!-- border: none; 제거 -->
-                        <li><a href="/" style="text-decoration: none;">리뷰</a></li>
-                        <li><a href="{% url 'tourist_list' %}" style="text-decoration: none;">여행지</a></li>
-                        <li><a href="/data" style="text-decoration: none;">데이터</a></li>
-                        <li><a href="/work1" style="text-decoration: none;">과제1</a></li>
-                        <li><a href="/work2" style="text-decoration: none;">과제2</a></li>
-                    </ul>
-                </div>
-                <div class="logout-button" style="margin-right: 50px;"> <!-- 로그아웃 버튼과 메뉴 간 여백 추가 -->
-                    <a href="{% url 'logout' %}" style="font-size: 0.8em ">로그아웃</a>
-                </div>
-            </nav>
+        <nav style="flex-grow: 1; display: flex; justify-content: flex-start; margin-left: 130px;">
+            <div class="menu-container">
+                <ul style="display: flex; margin: 0; padding: 0; list-style: none;">
+                    <li><a href="/" style="text-decoration: none;">리뷰</a></li>
+                    <li><a href="{% url 'tourist_list' %}" style="text-decoration: none;">여행지</a></li>
+                    <li><a href="/data" style="text-decoration: none;">데이터</a></li>
+                    <li><a href="/work1" style="text-decoration: none;">과제1</a></li>
+                    <li><a href="/work2" style="text-decoration: none;">과제2</a></li>
+                </ul>
+            </div>
+            <div class="logout-button" style="margin-right: 50px;">
+                <a href="{% url 'logout' %}" style="font-size: 0.8em ">로그아웃</a>
+            </div>
+        </nav>
     </header>
 
     <main>
         {% block content %}
-        <!-- 개별 페이지에서 이 부분에 내용을 추가 -->
         {% endblock %}
     </main>
 
@@ -112,45 +111,43 @@
     </footer>
     <script>
         var map = new naver.maps.Map('map', {
-            center: new naver.maps.LatLng(35.894, 129.220), // 초기 중심 좌표
-            zoom: 10.2 // 줌 레벨
+            center: new naver.maps.LatLng(35.894, 129.220),
+            zoom: 10.2
         });
 
         // CSV 파일 읽기
-        fetch('{% static "travel.csv" %}')  // CSV 파일이 같은 폴더에 있을 경우
+        fetch('{% static "travel.csv" %}')
             .then(response => response.text())
             .then(data => {
-                const rows = data.split('\n').slice(1); // 첫 번째 행은 헤더이므로 생략
+                const rows = data.split('\n').slice(1);
                 rows.forEach(row => {
-                    const [name, latitude, longitude, link] = row.split(','); // 링크 추가
+                    const [name, latitude, longitude, link] = row.split(',');
                     if (name && latitude && longitude && link) {
                         const markerPosition = new naver.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
 
                         const marker = new naver.maps.Marker({
                             position: markerPosition,
                             map: map,
-                            title: name // 마커에 툴팁으로 장소 이름 표시
+                            title: name
                         });
 
-                        // 인포윈도우 생성
                         const infowindow = new naver.maps.InfoWindow({
                             content: `<div class="infowindow" style="width:150px;text-align:center;">
                                         <a href="${link}" target="_blank">${name}</a>
-                                       </div>` // 클릭 가능한 링크로 이름 추가
+                                       </div>`
                         });
 
-                        // 마커 클릭 이벤트
                         naver.maps.Event.addListener(marker, 'click', function () {
-                            infowindow.open(map, marker); // 인포윈도우 열기
+                            infowindow.open(map, marker);
                         });
 
-                        console.log(`Marker added: ${name} at ${markerPosition}`); // 마커 추가 로그
+                        console.log(`Marker added: ${name} at ${markerPosition}`);
                     }
                 });
             })
             .catch(error => {
                 console.error('Error loading CSV:', error);
-                document.getElementById('logger').innerText = 'Error loading CSV: ' + error.message; // 에러 메시지 표시
+                document.getElementById('logger').innerText = 'Error loading CSV: ' + error.message;
             });
     </script>
 </body>
