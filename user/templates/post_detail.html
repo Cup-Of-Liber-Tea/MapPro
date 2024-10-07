@@ -1,34 +1,177 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-  <link rel="stylesheet" href="{% static 'user/css/detail2.css' %}">
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=xhqofn9jhr"></script>
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/markerclusterer.js"></script>
+<link rel="stylesheet" href="{% static 'user/css/detail2.css' %}">
 
-  <div class="post-detail-container">
-    <h2 class="post-title">{{ object.title }}</h2>
+<div class="post-detail-container">
+  <h2 class="post-title">{{ object.title }}</h2>
 
-    <!-- <div class="form-group">
+  <!-- <div class="form-group">
       <label for="sele">선택</label>
       {{ object.sele }}
     </div> -->
 
-    <div class="post-content">
-      <p>{{ object.content }}</p>
-    </div>
-
-    <p class="post-location">Location: {{ object.location }}</p>
-
-    {% if object.image %}
-      <img class="post-image" src="{{ object.image.url }}" alt="Image for {{ object.title }}">
-    {% endif %}
-
-    <p class="post-author">Author: {{ object.author }}</p>
-    <p class="post-created-at">Created at: {{ object.created_at }}</p>
-
-    {% if request.user.username == object.author %}
-        <a href="{% url 'post-edit' object.pk %}">Edit</a> |
-        <a href="{% url 'post-delete' object.pk %}">Delete</a> <br>
-    {% endif %}
-
-    <a class="back-link" href="{% url 'post-list' %}">Back to list</a>
+  <div class="post-content">
+    <p>{{ object.content }}</p>
   </div>
+
+  <p class="post-location">Location: {{ object.location }}</p>
+
+  {% if object.image %}
+  <img class="post-image" src="{{ object.image.url }}" alt="Image for {{ object.title }}">
+  {% endif %}
+
+  <p class="post-author">Author: {{ object.author }}</p>
+  <p class="post-created-at">Created at: {{ object.created_at }}</p>
+
+  {% if request.user.username == object.author %}
+  <a href="{% url 'post-edit' object.pk %}">Edit</a> |
+  <a href="{% url 'post-delete' object.pk %}">Delete</a> <br>
+  {% endif %}
+
+  <!-- <div id="map" style="width:100%;height:500px;"></div>
+  <div id="tourist-spots-list"></div> -->
+
+  <a class="back-link" href="{% url 'post-list' %}">Back to list</a>
+</div>
+
+<!-- <script>
+  var map;
+var markers = [];
+var userLocation;
+
+function initMap() {
+  map = new naver.maps.Map('map', {
+    center: new naver.maps.LatLng(35.8393, 129.2279), // 경주 중심 좌표
+    zoom: 12
+  });
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);
+  } else {
+    var center = map.getCenter();
+    setMapCenter(center);
+  }
+}
+
+function onSuccessGeolocation(position) {
+  userLocation = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
+  setMapCenter(userLocation);
+  fetchTouristSpots(userLocation);
+}
+
+function onErrorGeolocation() {
+  var center = map.getCenter();
+  userLocation = center;
+  setMapCenter(center);
+}
+
+function setMapCenter(location) {
+  map.setCenter(location);
+  var marker = new naver.maps.Marker({
+    position: location,
+    map: map,
+    icon: {
+      content: '<div style="background-color:red;width:20px;height:20px;border-radius:50%;"></div>',
+      anchor: new naver.maps.Point(10, 10)
+    }
+  });
+}
+
+async function fetchTouristSpots(location) {
+  const apiUrl = "http://apis.data.go.kr/5050000/dstrctsTrrsrtService/getDstrctsTrrsrt";
+  const params = {
+    serviceKey: "0OqIh/dSuVpGLLplebEorV4PTg6OC2ht/iiVg0ZabhBfKsX2EJwtAoizU3JjdH/uNz6G/800CT8f6YWfbI8v6w==",
+    pageNo: "1",
+    numOfRows: "164",
+    type: "json"
+  };
+
+  try {
+    const response = await fetch(`${apiUrl}?${new URLSearchParams(params)}`);
+    if (!response.ok) {
+      throw new Error("API 호출 실패: " + response.status);
+    }
+    const data = await response.json();
+    console.log("API 응답:", data);
+    if (data.response && data.response.body && data.response.body.items) {
+      displayTouristSpots(data.response.body.items.item);
+    } else {
+      console.error("예상치 못한 API 응답 구조:", data);
+    }
+  } catch (error) {
+    console.error("Error fetching tourist spots:", error);
+  }
+}
+
+function displayTouristSpots(spots) {
+  const listElement = document.getElementById('tourist-spots-list');
+  listElement.innerHTML = '<h3>주변 여행지</h3>';
+  const ul = document.createElement('ul');
+
+  if (!Array.isArray(spots)) {
+    console.error("spots is not an array:", spots);
+    return;
+  }
+
+  // 거리 계산 및 정렬
+  const spotsWithDistance = spots.map(spot => {
+    const lat = parseFloat(spot.CON_LATITUDE);
+    const lng = parseFloat(spot.CON_LONGITUDE);
+    let distance = Infinity;
+    if (!isNaN(lat) && !isNaN(lng) && userLocation) {
+      distance = calculateDistance(userLocation, lat, lng);
+    }
+    return { ...spot, distance };
+  }).sort((a, b) => a.distance - b.distance);
+
+  // 상위 10개만 선택
+  const nearestSpots = spotsWithDistance.slice(0, 10);
+
+  nearestSpots.forEach((spot) => {
+    const li = document.createElement('li');
+    const spotName = spot.CON_TITLE || "이름 없음";
+    const distanceText = spot.distance === Infinity ? "거리 정보 없음" : `${spot.distance.toFixed(2)} km`;
+    li.textContent = `${spotName} (거리: ${distanceText})`;
+    ul.appendChild(li);
+
+    if (spot.distance !== Infinity) {
+      const position = new naver.maps.LatLng(spot.CON_LATITUDE, spot.CON_LONGITUDE);
+      const marker = new naver.maps.Marker({
+        position: position,
+        map: map
+      });
+      markers.push(marker);
+
+      naver.maps.Event.addListener(marker, 'click', function() {
+        map.setCenter(position);
+        map.setZoom(14);
+      });
+    }
+  });
+
+  listElement.appendChild(ul);
+}
+
+function calculateDistance(userLoc, lat2, lon2) {
+  const R = 6371; // 지구의 반경 (km)
+  const dLat = deg2rad(lat2 - userLoc.lat());
+  const dLon = deg2rad(lon2 - userLoc.lng());
+  const a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(userLoc.lat())) * Math.cos(deg2rad(lat2)) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const distance = R * c; // 거리 (km)
+  return distance;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI/180);
+}
+
+window.onload = initMap;
+</script> -->
 {% endblock %}
