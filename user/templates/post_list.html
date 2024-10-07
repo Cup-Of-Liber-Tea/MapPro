@@ -257,32 +257,31 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {// HTML 문서가 로드되면 실행
         // 마우스 커서 효과
-        const postItems = document.querySelectorAll('.post-item');
-        postItems.forEach(item => {
-            item.addEventListener('mousemove', function (e) {
-                const rect = item.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                item.style.background = `radial-gradient(circle at ${x}px ${y}px, #f0f0f0, #fff)`;
+        const postItems = document.querySelectorAll('.post-item');// 모든 포스트 아이템을 찾음
+        postItems.forEach(item => {// 각 포스트 아이템에 대해
+            item.addEventListener('mousemove', function (e) {// 마우스가 움직이면
+                const rect = item.getBoundingClientRect();// 아이템의 위치와 크기 정보를 가져옴
+                const x = e.clientX - rect.left;// 마우스의 x 좌표를 계산
+                const y = e.clientY - rect.top;//   마우스의 y 좌표를 계산
+                item.style.background = `radial-gradient(circle at ${x}px ${y}px, #f0f0f0, #fff)`;// 원형 그라데이션 효과를 적용
             });
-            item.addEventListener('mouseleave', function () {
-                item.style.background = '';
+            item.addEventListener('mouseleave', function () {// 마우스가 아이템을 벗어나면
+                item.style.background = '';// 배경을 투명하게 만들어 원래 색상으로 되돌림
             });
         });
 
         // 검색 입력 필드 효과
-        const searchInput = document.querySelector('.search-input');
-        searchInput.addEventListener('focus', function () {
-            this.style.boxShadow = '0 0 5px rgba(0,123,255,0.5)';
+        const searchInput = document.querySelector('.search-input');// 검색 입력 필드를 찾음
+        searchInput.addEventListener('focus', function () {// 검색 입력 필드에 포커스가 들어오면
+            this.style.boxShadow = '0 0 5px rgba(0,123,255,0.5)';// 테두리에 그림자 효과를 줌
         });
-        searchInput.addEventListener('blur', function () {
-            this.style.boxShadow = '';
+        searchInput.addEventListener('blur', function () {// 검색 입력 필드에 포커스가 나가면
+            this.style.boxShadow = '';// 그림자 효과를 제거
         });
 
-        // 스크롤 효과
-        // 스크롤 효과
+
         
         // window.addEventListener('scroll', function () {
         //     const scrollPosition = window.scrollY;

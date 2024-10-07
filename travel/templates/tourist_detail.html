@@ -268,8 +268,8 @@
         // 마커 추가 및 지도 초기화 함수
         function initMap(items) {
             // tourist.name과 일치하는 타이틀 찾기
-            const touristName = "{{ tourist.name }}";
-            const matchingItem = items.find(item => item.CON_TITLE === touristName);
+            const touristName = "{{ tourist.name }}";// 관광지 이름
+            const matchingItem = items.find(item => item.CON_TITLE === touristName);// 관광지 이름으로 찾기
 
             if (matchingItem && matchingItem.CON_LATITUDE && matchingItem.CON_LONGITUDE) {
                 // 마커를 기준으로 지도를 설정합니다.
@@ -283,7 +283,7 @@
 
                 // 마커 추가
                 var marker = new kakao.maps.Marker({
-                    position: new kakao.maps.LatLng(matchingItem.CON_LATITUDE, matchingItem.CON_LONGITUDE),
+                    position: new kakao.maps.LatLng(matchingItem.CON_LATITUDE, matchingItem.CON_LONGITUDE),// 마커 위치
                     map: map,
                     title: matchingItem.CON_TITLE
                 });
@@ -313,7 +313,7 @@
 
         // 관광지 데이터 가져오기
         fetchTouristSpots().then(data => {
-            const items = data.response.body.items.item;
+            const items = data.response.body.items.item;// 관광지 데이터
             initMap(items);
         }).catch(error => {
             console.error("에러:", error);

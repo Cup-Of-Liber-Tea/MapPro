@@ -99,57 +99,59 @@
         border-radius: 8px;
         margin-bottom: 20px;
     }
-/* ㅇ */
-#tourist-spots-list {
-    width: 100%;
-    max-height: 500px;
-    overflow-y: auto;
-    padding: 20px;
-    border: none;
-    border-radius: 12px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
 
-#tourist-spots-list h3 {
-    margin: 0 0 20px 0;
-    color: #2c3e50;
-    font-size: 24px;
-    font-weight: 600;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 10px;
-}
+    /* ㅇ */
+    #tourist-spots-list {
+        width: 100%;
+        max-height: 500px;
+        overflow-y: auto;
+        padding: 20px;
+        border: none;
+        border-radius: 12px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
-#tourist-spots-list ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
+    #tourist-spots-list h3 {
+        margin: 0 0 20px 0;
+        color: #2c3e50;
+        font-size: 24px;
+        font-weight: 600;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+    }
 
-#tourist-spots-list li {
-    margin-bottom: 15px;
-    padding: 15px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-}
+    #tourist-spots-list ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
 
-#tourist-spots-list li:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+    #tourist-spots-list li {
+        margin-bottom: 15px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
 
-#tourist-spots-list a {
-    color: #3498db;
-    text-decoration: none;
-    font-weight: 500;
-}
+    #tourist-spots-list li:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-#tourist-spots-list a:hover {
-    color: #2980b9;
-    text-decoration: underline;
-}
+    #tourist-spots-list a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    #tourist-spots-list a:hover {
+        color: #2980b9;
+        text-decoration: underline;
+    }
+
     @media (min-width: 768px) {
         #map-container {
             flex-direction: row;
@@ -385,43 +387,43 @@
 
     function initMap() {
         map = new naver.maps.Map('map', {
-            center: new naver.maps.LatLng(35.8393, 129.2279), // 경주 중심 좌표
-            zoom: 12
+            // center: new naver.maps.LatLng(35.8393, 129.2279), // 경주 중심 좌표
+            zoom: 7
         });
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);
+        if (navigator.geolocation) {// 사용자 위치 정보를 가져올 수 있는 경우
+            navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);// 사용자 위치 정보 가져오기
         } else {
-            var center = map.getCenter();
-            setMapCenter(center);
+            var center = map.getCenter();// 지도 중심 좌표
+            setMapCenter(center);// 지도 중심 설정
         }
     }
 
-    function onSuccessGeolocation(position) {
-        userLocation = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        setMapCenter(userLocation);
-        fetchTouristSpots(userLocation);
+    function onSuccessGeolocation(position) {// 사용자 위치 정보를 가져온 경우
+        userLocation = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);// 사용자 위치 좌표
+        setMapCenter(userLocation);// 지도 중심을 사용자 위치로 설정
+        fetchTouristSpots(userLocation);// 주변 관광지 정보 가져오기
     }
 
-    function onErrorGeolocation() {
+    function onErrorGeolocation() {// 사용자 위치 정보를 가져오지 못한 경우
         var center = map.getCenter();
         userLocation = center;
         setMapCenter(center);
     }
 
-    function setMapCenter(location) {
-        map.setCenter(location);
-        var marker = new naver.maps.Marker({
-            position: location,
-            map: map,
+    function setMapCenter(location) {// 지도 중심을 location으로 설정
+        map.setCenter(location);// 지도 중심 설정
+        var marker = new naver.maps.Marker({// 마커 생성
+            position: location,// 마커 위치
+            map: map,// 지도 객체
             icon: {
-                content: '<div style="background-color:red;width:20px;height:20px;border-radius:50%;"></div>',
-                anchor: new naver.maps.Point(10, 10)
+                content: '<div style="background-color:red;width:20px;height:20px;border-radius:50%;"></div>',// 마커 모양 변경
+                anchor: new naver.maps.Point(10, 10)// 마커 중심 위치 설정
             }
         });
     }
 
-    async function fetchTouristSpots(location) {
+    async function fetchTouristSpots(location) {// 주변 관광지 정보 가져오기
         const apiUrl = "http://apis.data.go.kr/5050000/dstrctsTrrsrtService/getDstrctsTrrsrt";
         const params = {
             serviceKey: "0OqIh/dSuVpGLLplebEorV4PTg6OC2ht/iiVg0ZabhBfKsX2EJwtAoizU3JjdH/uNz6G/800CT8f6YWfbI8v6w==",
@@ -431,111 +433,98 @@
         };
 
         try {
-            const response = await fetch(`${apiUrl}?${new URLSearchParams(params)}`);
+            const response = await fetch(`${apiUrl}?${new URLSearchParams(params)}`);// API 호출
             if (!response.ok) {
-                throw new Error("API 호출 실패: " + response.status);
+                throw new Error("API 호출 실패: " + response.status);// API 호출 실패 시 오류 메시지 출력
             }
             const data = await response.json();
-            console.log("API 응답:", data);
+            console.log("API 응답:", data);// API 응답 확인
             if (data.response && data.response.body && data.response.body.items) {
                 displayTouristSpots(data.response.body.items.item);
-            } else {
+            } else {//  API 응답 구조가 예상과 다른 경우
                 console.error("예상치 못한 API 응답 구조:", data);
             }
-        } catch (error) {
+        } catch (error) {// API 호출 실패
             console.error("Error fetching tourist spots:", error);
         }
     }
-    //dd
-    function displayTouristSpots(spots) {
-        const listElement = document.getElementById('tourist-spots-list');
-        listElement.innerHTML = '<h3>주변 여행지</h3>';
-        const ul = document.createElement('ul');
 
-        if (!Array.isArray(spots)) {
-            console.error("spots is not an array:", spots);
-            return;
+    function displayTouristSpots(spots) {// 주변 관광지 정보 표시
+        const listElement = document.getElementById('tourist-spots-list');// 관광지 목록 요소
+        listElement.innerHTML = '<h3>나와 가까운 여행지 10곳</h3>';// 제목 추가
+        const ul = document.createElement('ul');// 목록 요소 생성
+
+        if (!Array.isArray(spots)) {// spots가 배열이 아닌 경우
+            console.error("spots is not an array:", spots);// 오류 메시지 출력
+            return;// 함수 종료
         }
 
         // 거리 계산 및 정렬
-        const spotsWithDistance = spots.map(spot => {
-            const lat = parseFloat(spot.CON_LATITUDE);
-            const lng = parseFloat(spot.CON_LONGITUDE);
-            let distance = Infinity;
-            if (!isNaN(lat) && !isNaN(lng) && userLocation) {
-                distance = calculateDistance(userLocation, lat, lng);
+        const spotsWithDistance = spots.map(spot => {// 거리 정보 추가
+            const lat = parseFloat(spot.CON_LATITUDE);// 위도
+            const lng = parseFloat(spot.CON_LONGITUDE);// 경도
+            let distance = Infinity;// 거리 초기값
+            if (!isNaN(lat) && !isNaN(lng) && userLocation) {// 위도, 경도, 사용자 위치 정보가 있는 경우
+                distance = calculateDistance(userLocation, lat, lng);// 거리 계산
             }
-            return { ...spot, distance };
-        }).sort((a, b) => a.distance - b.distance);
+            return { ...spot, distance };// 거리 정보 추가
+        }).sort((a, b) => a.distance - b.distance);// 거리로 오름차순 정렬
 
         // 상위 10개만 선택
         const nearestSpots = spotsWithDistance.slice(0, 10);
 
-        nearestSpots.forEach((spot) => {
-            const li = document.createElement('li');
-            const spotName = spot.CON_TITLE || "이름 없음";
-            const distanceText = spot.distance === Infinity ? "거리 정보 없음" : `${spot.distance.toFixed(2)} km`;
+        nearestSpots.forEach((spot) => {// 각 관광지 정보에 대해
+            const li = document.createElement('li');// 목록 요소 생성
+            const spotName = spot.CON_TITLE || "이름 없음";// 관광지 이름
+            const distanceText = spot.distance === Infinity ? "거리 정보 없음" : `${spot.distance.toFixed(2)} km`;// 거리 텍스트
 
             // 하이퍼링크 생성
-            const link = document.createElement('a');
+            const link = document.createElement('a');// 링크 요소 생성
             link.href = `https://${spot.LINKURL}`; // 도메인 추가
-            link.textContent = spotName;
+            link.textContent = spotName;// 링크 텍스트
             link.target = "_blank"; // 새 탭에서 링크 열기
 
-            li.appendChild(link);
-            li.appendChild(document.createTextNode(` (거리: ${distanceText})`));
-            ul.appendChild(li);
+            li.appendChild(link);// 링크를 목록 요소에 추가
+            li.appendChild(document.createTextNode(` (거리: ${distanceText})`));// 거리 정보를 목록 요소에 추가
+            ul.appendChild(li);// 목록 요소를 목록에 추가
 
-            if (spot.distance !== Infinity) {
-                const position = new naver.maps.LatLng(spot.CON_LATITUDE, spot.CON_LONGITUDE);
-                const marker = new naver.maps.Marker({
-                    position: position,
-                    map: map
+            if (spot.distance !== Infinity) {// 거리 정보가 있는 경우
+                const position = new naver.maps.LatLng(spot.CON_LATITUDE, spot.CON_LONGITUDE);// 관광지 위치 좌표
+                const marker = new naver.maps.Marker({// 마커 생성
+                    position: position,// 마커 위치
+                    map: map// 지도 객체
                 });
-                markers.push(marker);
+                markers.push(marker);// 마커 목록에 추가
 
-                naver.maps.Event.addListener(marker, 'click', function () {
-                    map.setCenter(position);
-                    map.setZoom(14);
+                naver.maps.Event.addListener(marker, 'click', function () {// 마커 클릭 시
+                    map.setCenter(position);// 지도 중심을 마커 위치로 설정
+                    map.setZoom(14);// 지도 확대
                 });
             }
         });
 
-        listElement.appendChild(ul);
+        listElement.appendChild(ul);//
     }
 
-
-
-
-
-
-
-
-    function calculateDistance(userLoc, lat2, lon2) {
+    function calculateDistance(userLoc, lat2, lon2) {// 사용자 위치와 관광지 위치 사이의 거리 계산
         const R = 6371; // 지구의 반경 (km)
-        const dLat = deg2rad(lat2 - userLoc.lat());
-        const dLon = deg2rad(lon2 - userLoc.lng());
+        const dLat = deg2rad(lat2 - userLoc.lat());// 위도 차
+        const dLon = deg2rad(lon2 - userLoc.lng());// 경도 차
         const a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(deg2rad(userLoc.lat())) * Math.cos(deg2rad(lat2)) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +// 위도 차의 제곱
+            Math.cos(deg2rad(userLoc.lat())) * Math.cos(deg2rad(lat2)) *// 사용자 위치와 관광지 위치의 코사인
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);// 경도 차의 제곱
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));// 각도 계산
         const distance = R * c; // 거리 (km)
-        return distance;
+        return distance;// 거리 반환
     }
 
-    function deg2rad(deg) {
-        return deg * (Math.PI / 180);
+    function deg2rad(deg) {// 각도를 라디안으로 변환
+        return deg * (Math.PI / 180);// 각도 * (파이 / 180)
     }
 
     window.onload = initMap;
 </script>
 
 
-
-
-
-
-
-<a href=""></a>
 {% endblock %}

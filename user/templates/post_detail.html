@@ -48,66 +48,66 @@ function initMap() {
     zoom: 12
   });
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);
+  if (navigator.geolocation) {// 사용자 위치 정보를 가져올 수 있는 경우
+    navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);// 사용자 위치 정보를 가져옴
   } else {
-    var center = map.getCenter();
+    var center = map.getCenter();// 지도 중심 좌표를 얻어옴
     setMapCenter(center);
   }
 }
 
-function onSuccessGeolocation(position) {
-  userLocation = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
-  setMapCenter(userLocation);
-  fetchTouristSpots(userLocation);
+function onSuccessGeolocation(position) {// 사용자 위치 정보를 가져오는 데 성공한 경우
+  userLocation = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);// 사용자의 위치 정보를 저장
+  setMapCenter(userLocation);// 지도의 중심을 사용자의 위치로 설정
+  fetchTouristSpots(userLocation);// 주변 관광지 정보를 가져옴
 }
 
-function onErrorGeolocation() {
-  var center = map.getCenter();
-  userLocation = center;
-  setMapCenter(center);
+function onErrorGeolocation() {// 사용자 위치 정보를 가져오는 데 실패한 경우
+  var center = map.getCenter();// 지도 중심 좌표를 얻어옴
+  userLocation = center;// 사용자의 위치 정보를 지도 중심으로 설정
+  setMapCenter(center);// 지도의 중심을 사용자의 위치로 설정
 }
 
-function setMapCenter(location) {
-  map.setCenter(location);
-  var marker = new naver.maps.Marker({
-    position: location,
-    map: map,
+function setMapCenter(location) {// 지도의 중심을 설정하는 함수
+  map.setCenter(location);// 지도의 중심을 location으로 설정
+  var marker = new naver.maps.Marker({// 마커를 생성
+    position: location,// 마커의 위치
+    map: map,// 마커를 표시할 지도
     icon: {
-      content: '<div style="background-color:red;width:20px;height:20px;border-radius:50%;"></div>',
-      anchor: new naver.maps.Point(10, 10)
+      content: '<div style="background-color:red;width:20px;height:20px;border-radius:50%;"></div>',// 마커의 모양을 설정
+      anchor: new naver.maps.Point(10, 10)// 마커의 중심을 설정
     }
   });
 }
 
-async function fetchTouristSpots(location) {
-  const apiUrl = "http://apis.data.go.kr/5050000/dstrctsTrrsrtService/getDstrctsTrrsrt";
+async function fetchTouristSpots(location) {// 주변 관광지 정보를 가져오는 함수
+  const apiUrl = "http://apis.data.go.kr/5050000/dstrctsTrrsrtService/getDstrctsTrrsrt";// API 주소
   const params = {
-    serviceKey: "0OqIh/dSuVpGLLplebEorV4PTg6OC2ht/iiVg0ZabhBfKsX2EJwtAoizU3JjdH/uNz6G/800CT8f6YWfbI8v6w==",
-    pageNo: "1",
-    numOfRows: "164",
-    type: "json"
+    serviceKey: "0OqIh/dSuVpGLLplebEorV4PTg6OC2ht/iiVg0ZabhBfKsX2EJwtAoizU3JjdH/uNz6G/800CT8f6YWfbI8v6w==",// API 키
+    pageNo: "1",// 페이지 번호
+    numOfRows: "164",// 한 번에 가져올 관광지의 개수
+    type: "json"// JSON 형식으로 가져옴
   };
 
   try {
-    const response = await fetch(`${apiUrl}?${new URLSearchParams(params)}`);
-    if (!response.ok) {
-      throw new Error("API 호출 실패: " + response.status);
+    const response = await fetch(`${apiUrl}?${new URLSearchParams(params)}`);// API를 호출하고 응답을 받음
+    if (!response.ok) {// 응답이 성공적이지 않은 경우
+      throw new Error("API 호출 실패: " + response.status);// 응답이 성공적이지 않은 경우 에러를 발생시킴
     }
-    const data = await response.json();
-    console.log("API 응답:", data);
-    if (data.response && data.response.body && data.response.body.items) {
-      displayTouristSpots(data.response.body.items.item);
+    const data = await response.json();// 응답을 JSON 형식으로 변환
+    console.log("API 응답:", data);// API 응답을 출력
+    if (data.response && data.response.body && data.response.body.items) {// API 응답이 예상대로 온 경우
+      displayTouristSpots(data.response.body.items.item);// 주변 관광지 정보를 출력
     } else {
-      console.error("예상치 못한 API 응답 구조:", data);
+      console.error("예상치 못한 API 응답 구조:", data);// API 응답이 예상대로 오지 않은 경우 에러를 출력
     }
-  } catch (error) {
-    console.error("Error fetching tourist spots:", error);
+  } catch (error) {// API 호출이 실패한 경우
+    console.error("Error fetching tourist spots:", error);// 에러를 출력
   }
 }
 
-function displayTouristSpots(spots) {
-  const listElement = document.getElementById('tourist-spots-list');
+function displayTouristSpots(spots) {// 주변 관광지 정보를 출력하는 함수
+  const listElement = document.getElementById('tourist-spots-list');// 관광지 정보를 출력할 요소를 가져옴
   listElement.innerHTML = '<h3>주변 여행지</h3>';
   const ul = document.createElement('ul');
 
