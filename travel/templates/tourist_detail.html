@@ -211,10 +211,9 @@
                 <h2>관광지 정보</h2>
                 <p><strong><i class="fa-solid fa-info-circle"></i> 설명:</strong> {{ tourist.description }}</p>
                 <p><strong><i class="fa-solid fa-map-marker-alt"></i> 위치:</strong> {{ tourist.location }}</p>
-                <p><strong><i class="fa-solid fa-clock"></i> 운영 시간:</strong> {{ tourist.operating_hours|default:"전화문의"
-                    }}</p>
-                <p><strong><i class="fa-solid fa-ticket-alt"></i> 입장료:</strong> {{ tourist.entrance_fee|default:"홈페이지문의"
-                    }}</p>
+                <p><strong><i class="fa-solid fa-clock"></i> 운영 시간:</strong> {{ tourist.operating_hours|default:"전화문의" }}
+                </p>
+                <p><strong><i class="fa-solid fa-ticket-alt"></i> 입장료:</strong> {{ tourist.entrance_fee|default:"홈페이지문의" }}</p>
                 <p><strong><i class="fa-solid fa-parking"></i> 주차정보:</strong> {{ tourist.parking|default:"전화문의" }}</p>
             </div>
 
